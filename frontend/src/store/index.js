@@ -1,9 +1,11 @@
 import {createStore} from "vuex";
+// import {signAction} from "./actions/signUp";
 
 export default createStore({
   state: {
     loginPopup: false,
     signUpPopup: false,
+    idCheck: "",
   },
   getters: {},
   mutations: {
@@ -20,6 +22,8 @@ export default createStore({
       state.signUpPopup = false;
     },
   },
-  actions: {},
+  actions: {
+    // signAction
+  },
   modules: {},
 });

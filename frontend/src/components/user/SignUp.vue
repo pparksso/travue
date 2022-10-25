@@ -9,10 +9,46 @@
           </button>
         </div>
         <div class="mid">
-          <input type="text" placeholder="ID (6자 이상)" />
-          <input type="text" placeholder="NICKNAME (2자 이상)" />
-          <input type="password" placeholder="PASSWORD (8자 이상)" />
-          <input type="password" placeholder="PASSWORD CHECK" />
+          <input
+            type="text"
+            placeholder="ID (6자 이상)"
+            v-model="userId"
+            minlength="6"
+            maxlength="16"
+            @blur="idCheck"
+          />
+          <div class="check">
+            <!-- <p class="ok">사용할 수 있는 아이디입니다.</p>
+            <p class="no">사용할 수 없는 아이디입니다.</p> -->
+          </div>
+          <input
+            type="text"
+            placeholder="NICKNAME (2자 이상)"
+            v-model="userNickname"
+            minlength="2"
+            maxlength="12"
+          />
+          <div class="check">
+            <!-- <p class="ok">사용할 수 있는 닉네임입니다.</p>
+            <p p class="no">사용할 수 없는 닉네임입니다.</p> -->
+          </div>
+          <input
+            type="password"
+            placeholder="PASSWORD (8자 이상)"
+            v-model="userPw"
+            minlength="8"
+            maxlength="20"
+          />
+          <input
+            type="password"
+            placeholder="PASSWORD CHECK"
+            v-model="userPw02"
+            minlength="8"
+            maxlength="20"
+          />
+          <div class="check">
+            <!-- <p p class="no">비밀번호를 다시 한번 확인해 주세요.</p> -->
+          </div>
         </div>
         <div class="bottom">
           <button><span>SIGN UP</span></button>
@@ -25,6 +61,14 @@
 <script>
 export default {
   name: "SignUp",
+  data() {
+    return {
+      userId: "",
+      userNickname: "",
+      userPw: "",
+      userPw02: "",
+    };
+  },
   methods: {
     close() {
       this.$store.commit("hideSignUp");
@@ -65,6 +109,18 @@ export default {
         padding: 5px;
         &:not(:last-child) {
           margin-bottom: 10px;
+        }
+      }
+      .check {
+        p {
+          font-size: 11px;
+          margin-bottom: 5px;
+          &.ok {
+            color: rgb(4, 0, 255);
+          }
+          &.no {
+            color: #f00;
+          }
         }
       }
     }
