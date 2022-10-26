@@ -37,3 +37,25 @@ export const signUpStore = defineStore("signUp", {
     },
   },
 });
+
+export const postStore = defineStore("post", {
+  state: () => ({
+    now: false,
+    id: 0,
+  }),
+  actions: {
+    clickPost(id) {
+      this.id = id;
+      this.now = true;
+      // console.log(this.id);
+    },
+  },
+  getters: {
+    getPostId() {
+      return this.id;
+    },
+    openPost() {
+      return this.now;
+    },
+  },
+});

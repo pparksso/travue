@@ -16,12 +16,14 @@ const updateRouter = require("./routes/update.js");
 const userRouter = require("./routes/user.js");
 const heartRouter = require("./routes/heart.js");
 const commentRouter = require("./routes/comment.js");
+const options = { etag: false };
 
 const app = express();
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
+app.set("etag", false);
 
 app.use(
   cors({
@@ -29,6 +31,8 @@ app.use(
     origin: true,
   })
 );
+app.disable("etag");
+app.use(express.static("public", options));
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

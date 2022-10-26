@@ -22,18 +22,27 @@
 
 <script>
 import {loginStore} from "@/store/popup";
-import {mapActions} from "pinia";
+
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: "Login",
-  computed: {
-    ...mapActions(loginStore, ["close"]),
+  setup() {
+    const login = loginStore();
+    return {
+      login,
+    };
+  },
+  methods: {
+    close() {
+      this.login.close();
+    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
 .blackBg {
+  z-index: 1000;
   height: 100vh;
   width: 100vw;
   position: fixed;

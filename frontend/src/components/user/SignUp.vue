@@ -93,6 +93,7 @@ export default {
 
 <style lang="scss" scope>
 .blackBg {
+  z-index: 1000;
   height: 100vh;
   width: 100vw;
   position: fixed;

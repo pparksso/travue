@@ -1,36 +1,34 @@
 <template>
   <Header />
   <Login v-if="login.loginState" />
-  <SignUp v-if="signUpState" />
+  <SignUp v-if="signUp.signUpState" />
+  <PostPopup v-if="post.openPost" />
   <router-view></router-view>
 </template>
 <script>
-import {mapState} from "pinia";
 import Header from "./components/common/Header.vue";
 import Login from "./components/user/Login.vue";
 import SignUp from "./components/user/SignUp.vue";
 import {loginStore, signUpStore} from "./store/popup";
+import PostPopup from "./components/contents/PostPopup.vue";
+import {postStore} from "@/store/popup";
 export default {
   name: "App",
   components: {
     Header,
     Login,
     SignUp,
+    PostPopup,
   },
   setup() {
     const login = loginStore();
-    // const signUp = signUpStore();
+    const signUp = signUpStore();
+    const post = postStore();
     return {
       login,
+      signUp,
+      post,
     };
-  },
-  computed: {
-    ...mapState(loginStore, {
-      loginState: "loginState",
-    }),
-    ...mapState(signUpStore, {
-      signUpState: "now",
-    }),
   },
 };
 </script>
@@ -42,6 +40,7 @@ export default {
 }
 body {
   margin: 0;
+  overflow-x: hidden;
 }
 button {
   outline: none;
