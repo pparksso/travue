@@ -1,22 +1,31 @@
 <template>
   <div class="nav">
     <ul>
-      <li><button @click="showLogin">Login</button></li>
-      <li><button @click="showSignUp">Sign up</button></li>
+      <li><button @click="openLogin">Login</button></li>
+      <li><button @click="openSignUp">Sign up</button></li>
     </ul>
   </div>
 </template>
 
 <script>
+import {loginStore, signUpStore} from "@/store/popup";
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: "Nav",
+  setup() {
+    const login = loginStore();
+    const signUp = signUpStore();
+    return {
+      login,
+      signUp,
+    };
+  },
   methods: {
-    showLogin() {
-      this.$store.commit("showLogin");
+    openLogin() {
+      this.login.open();
     },
-    showSignUp() {
-      this.$store.commit("showSignUp");
+    openSignUp() {
+      this.signUp.open();
     },
   },
 };

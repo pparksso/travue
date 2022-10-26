@@ -21,13 +21,13 @@
 </template>
 
 <script>
+import {loginStore} from "@/store/popup";
+import {mapActions} from "pinia";
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: "Login",
-  methods: {
-    close() {
-      this.$store.commit("hideLogin");
-    },
+  computed: {
+    ...mapActions(loginStore, ["close"]),
   },
 };
 </script>

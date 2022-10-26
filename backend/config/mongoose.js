@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const dbConnect = mongoose
   .connect(process.env.MONGO_URL, {
-    dbName: "travue",
+    dbName: "travelApp",
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })

@@ -5,13 +5,17 @@ const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const env = require("dotenv").config();
 const dbConnect = require("./config/mongoose");
+const { cloudinary } = require("./config/cloudinary");
+const { storage } = require("./config/cloudinary");
+const passport = require("./config/passport");
+const cors = require("cors");
 
-const indexRouter = require("./routes/index");
-const usersRouter = require("./routes/users");
-const editRouter = require("./routes/edit");
-const heartRouter = require("./routes/heart");
-const newRouter = require("./routes/new");
-const searchRouter = require("./routes/search");
+const indexRouter = require("./routes");
+const createRouter = require("./routes/create.js");
+const updateRouter = require("./routes/update.js");
+const userRouter = require("./routes/user.js");
+const heartRouter = require("./routes/heart.js");
+const commentRouter = require("./routes/comment.js");
 
 const app = express();
 
@@ -19,6 +23,12 @@ const app = express();
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 
+app.use(
+  cors({
+    credentials: true,
+    origin: true,
+  })
+);
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -26,11 +36,11 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/", indexRouter);
-app.use("/users", usersRouter);
-app.use("/edit", editRouter);
+app.use("/create", createRouter);
+app.use("/update", updateRouter);
+app.use("/user", userRouter);
 app.use("/heart", heartRouter);
-app.use("/new", newRouter);
-app.use("/search", searchRouter);
+app.use("/comment", commentRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

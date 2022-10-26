@@ -4,7 +4,7 @@
       <div class="whiteBg">
         <div class="top">
           <h2>Sign Up</h2>
-          <button @click="close">
+          <button @click="closeBtn">
             <span class="material-icons"> close </span>
           </button>
         </div>
@@ -59,6 +59,8 @@
 </template>
 
 <script>
+import {signUpStore} from "@/store/popup";
+
 export default {
   name: "SignUp",
   data() {
@@ -69,9 +71,21 @@ export default {
       userPw02: "",
     };
   },
+  setup() {
+    const signUp = signUpStore();
+    return {
+      signUp,
+    };
+  },
   methods: {
-    close() {
-      this.$store.commit("hideSignUp");
+    idCheck() {
+      const regExp = /[ㄱ-ㅎㅏ-ㅣ가-힣]/g;
+      if (regExp.test(this.userId)) {
+        alert("영어, 숫자만 가능합니다.");
+      }
+    },
+    closeBtn() {
+      this.signUp.close();
     },
   },
 };
