@@ -1,19 +1,19 @@
 <template>
   <div class="pagination">
     <ul class="list">
-      <li v-if="preMove(startPage)">
+      <li v-if="preMove(start)">
         <button class="preBtn">
           <span class="material-icons"> chevron_left </span>
         </button>
       </li>
       <li
-        v-for="page in pageArr(startPage, endPage)"
+        v-for="page in pageArr(start, end)"
         :key="page"
         @click="$emit('pageNum', page)"
       >
         <button>{{ page }}</button>
       </li>
-      <li v-if="nextMove(endPage, totalPage)">
+      <li v-if="nextMove(end, total)">
         <button class="nextBtn">
           <span class="material-icons"> chevron_right </span>
         </button>
@@ -24,22 +24,29 @@
 
 <script setup>
 import {preMove, nextMove, pageArr} from "@/unit/pagination";
-import {defineProps, ref} from "vue";
+import {defineProps, watch} from "vue";
 const props = defineProps({
   start: Number,
   total: Number,
   end: Number,
   currentPage: Number,
 });
-const startPage = ref(props.start);
-const totalPage = ref(props.total);
-const endPage = ref(props.end);
-console.log(
-  startPage.value,
-  totalPage.value,
-  endPage.value,
-  nextMove(endPage.value, totalPage.value)
-);
+
+console.log({...props});
+
+watch(props, (newProps) => {
+  console.log({...newProps});
+});
+
+// const startPage = props.start;
+// const totalPage = props.total;
+// const endPage = props.end;
+// console.log(
+//   startPage.value,
+//   totalPage.value,
+//   endPage.value,
+//   nextMove(endPage.value, totalPage.value)
+// );
 </script>
 
 <style lang="scss" scoped>

@@ -5,11 +5,10 @@
         <Post />
       </ul>
       <Pagination
-        :start="start"
-        :total="total"
-        :end="end"
-        :currentPage="currentPage"
-        v-if="start"
+        :start="startPage"
+        :total="totalPage"
+        :end="lastPage"
+        :currentPage="page"
       />
     </div>
   </div>
@@ -20,18 +19,17 @@ import Post from "@/components/contents/Post.vue";
 import Pagination from "@/components/common/Pagination.vue";
 import {mainStore} from "@/store/contents";
 import {storeToRefs} from "pinia";
-import {ref} from "@vue/reactivity";
 const main = mainStore();
 
 // 포스트 갖고오기
 main.getContents();
 const {startPage, totalPage, lastPage, page} = storeToRefs(main);
 
-const start = ref(startPage.value);
-const total = ref(totalPage.value);
-const end = ref(lastPage.value);
-const currentPage = ref(page.value);
-console.log(start, total, end);
+// const start = startPage.value;
+// const total = totalPage.value;
+// const end = lastPage.value;
+// const currentPage = page.value;
+// console.log(start, total, end);
 </script>
 <!-- <script>
 import Post from "@/components/contents/Post.vue";
