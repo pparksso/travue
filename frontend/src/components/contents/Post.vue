@@ -1,9 +1,9 @@
 <template>
   <li
     class="post"
-    v-for="(item, i) in items.getPosts[0]"
+    v-for="item in items.getPosts[0]"
     :key="item.title"
-    @click="post.clickPost(i)"
+    @click="post.clickPost(item.no)"
   >
     <div class="contentsBox">
       <div class="img">

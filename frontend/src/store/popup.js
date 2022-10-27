@@ -47,7 +47,9 @@ export const postStore = defineStore("post", {
     clickPost(id) {
       this.id = id;
       this.now = true;
-      // console.log(this.id);
+    },
+    closePost() {
+      this.now = false;
     },
   },
   getters: {

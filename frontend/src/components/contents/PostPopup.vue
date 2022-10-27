@@ -6,22 +6,19 @@
           <h1></h1>
         </div>
         <button class="popupCloseBtn">
-          <span class="material-icons"> close </span>
+          <span class="material-icons" @click="post.closePost()"> close </span>
         </button>
       </div>
       <div class="popupBody">
         <div class="center">
           <div class="imgBox">
-            <!-- <img
-              :src="items.getPosts[0].imgUrl"
-              :alt="items.getPosts[0].title"
-            /> -->
+            <img :src="data.imgUrl" :alt="data.title" />
           </div>
           <div class="infoBox">
             <div class="info">
-              <span class="location">{{ items.getPosts[0].location }}</span>
-              <span class="date">{{ items.getPosts[0].date }}</span>
-              <span class="nickname">{{ items.getPosts[0].nickname }}</span>
+              <span class="location">{{ data.location }}</span>
+              <span class="date">{{ data.date }}</span>
+              <span class="nickname">{{ data.nickname }}</span>
             </div>
             <!-- <div class="heart">
               <span id="userHeartNum" class="heartNum" data-no="{{item.no}}">{{
@@ -46,7 +43,7 @@
             </div> -->
           </div>
           <div class="txtBox">
-            <p>{{ items.getPosts[0].desc }}</p>
+            <p>{{ data.desc }}</p>
           </div>
         </div>
         <!-- <div class="commentWrap">
@@ -108,7 +105,177 @@ export default {
       post,
     };
   },
+  data() {
+    return {
+      data: {},
+    };
+  },
+  created() {
+    this.items.getPosts[0].map((item) => {
+      if (item.no == this.post.getPostId) {
+        this.data = item;
+      }
+    });
+  },
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.cover {
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  z-index: 5000;
+  user-select: none;
+  background-color: rgba(0, 0, 0, 0.5);
+  .popupItem {
+    width: 40%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+    overflow: hidden;
+    background-color: #fff;
+    border-radius: 20px;
+    .top {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px;
+      border-bottom: 1px solid #aaa;
+      .title {
+        line-height: 1.5;
+        h1 {
+          font-size: 20px;
+          font-weight: 700;
+        }
+        button {
+          background: none;
+          .material-icons {
+            color: #333;
+          }
+        }
+      }
+    }
+    .popupBody {
+      max-height: 80vh;
+      overflow-y: auto;
+      &::-webkit-scrollbar {
+        width: 10px;
+      }
+      &::-webkit-scrollbar-thumb {
+        background: #4ab8c5;
+        border-radius: 10px;
+      }
+    }
+    .center {
+      border-bottom: 1px solid #aaa;
+      padding: 20px;
+      .imgBox {
+        margin-bottom: 20px;
+        img {
+          width: 100%;
+        }
+      }
+      .infoBox {
+        display: flex;
+        justify-content: space-between;
+        .info {
+          .location {
+            display: inline-block;
+            margin-right: 10px;
+          }
+          .date,
+          .nickname {
+            margin-right: 10px;
+            font-size: 13px;
+          }
+        }
+        .heart {
+          display: flex;
+          align-items: center;
+          .heartNum {
+            display: inline-block;
+            margin-bottom: 3px;
+            font-size: 12px;
+          }
+          button {
+            display: none;
+            background: none;
+            &#noUserHeart {
+              display: block;
+            }
+            .material-icons-outlined,
+            .material-icons {
+              font-size: 18px;
+              color: rgb(228, 9, 9);
+            }
+            &.on {
+              display: block;
+            }
+          }
+        }
+      }
+      .txtBox {
+        p {
+          font-family: "GangwonEdu_OTFBoldA";
+          font-size: 16px;
+          font-weight: 400;
+          line-height: 1.5;
+        }
+      }
+    }
+    .commentWrap {
+      padding: 10px 20px;
+      .inputBox {
+        display: flex;
+        label {
+          flex-grow: 1;
+          input {
+            width: 100%;
+            padding: 5px;
+            outline: none;
+            border-bottom: 1px solid #aaa;
+          }
+        }
+      }
+      .commentBox {
+        padding: 20px;
+        .comment {
+          font-size: 14px;
+          padding: 5px;
+          justify-content: space-between;
+          align-items: center;
+          transition: background-color 0.2s ease-in-out;
+          display: flex;
+          .commentLeft {
+            display: flex;
+            .userNickname {
+              word-break: keep-all;
+              display: inline-block;
+              width: 120px;
+              text-overflow: ellipsis;
+              overflow: hidden;
+              white-space: nowrap;
+            }
+            p {
+              word-break: keep-all;
+            }
+          }
+          .commentDelBtn {
+            background: none;
+            padding: 0;
+            .material-icons {
+              font-size: 15px;
+            }
+          }
+          &:hover {
+            background-color: #eee;
+          }
+        }
+      }
+    }
+  }
+}
+</style>
