@@ -1,21 +1,24 @@
 import {defineStore} from "pinia";
 import request from "@/api/axiosInstance";
+import {ref} from "vue";
 
 export const mainStore = defineStore("main", {
   state: () => ({
     contents: [],
     comments: [],
-    minPage: 1,
-    page: 1,
-    startPage: 1,
-    totalpage: 1,
+    minPage: ref(0),
+    page: ref(0),
+    startPage: ref(0),
+    totalPage: ref(0),
+    lastPage: ref(0),
+    pageNum: ref(1),
   }),
   actions: {
-    async getContents() {
+    async getContents(num) {
       try {
         await request({
           method: "GET",
-          url: "/index",
+          url: `/index?page=${num}`,
         }).then((res) => {
           const items = res.data;
           this.contents.push(items.contents);
@@ -23,7 +26,9 @@ export const mainStore = defineStore("main", {
           this.minPage = items.minPage;
           this.page = items.page;
           this.startPage = items.startPage;
-          this.totalpage = items.totalpage;
+          this.totalPage = items.totalPage;
+          console.log(this.totalPage);
+          this.lastPage = items.lastPage;
         });
       } catch (err) {
         console.log(err, "500보내야됨");
@@ -36,18 +41,6 @@ export const mainStore = defineStore("main", {
     },
     getComments() {
       return this.comments;
-    },
-    getMinPage() {
-      return this.minPage;
-    },
-    getPage() {
-      return this.page;
-    },
-    getStartPage() {
-      return this.startPage;
-    },
-    getTotalPage() {
-      return this.totalpage;
     },
   },
 });

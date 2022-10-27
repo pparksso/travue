@@ -4,11 +4,13 @@
   <SignUp v-if="signUp.signUpState" />
   <PostPopup v-if="post.openPost" />
   <router-view></router-view>
+  <Footer />
 </template>
 <script>
 import Header from "./components/common/Header.vue";
 import Login from "./components/user/Login.vue";
 import SignUp from "./components/user/SignUp.vue";
+import Footer from "./components/common/Footer.vue";
 import {loginStore, signUpStore} from "./store/popup";
 import PostPopup from "./components/contents/PostPopup.vue";
 import {postStore} from "@/store/popup";
@@ -19,6 +21,7 @@ export default {
     Login,
     SignUp,
     PostPopup,
+    Footer,
   },
   setup() {
     const login = loginStore();
@@ -41,6 +44,21 @@ export default {
 body {
   margin: 0;
   overflow-x: hidden;
+  position: relative;
+  font-size: 18px;
+  font-weight: 500;
+  color: #333;
+  &::-webkit-scrollbar {
+    width: 10px;
+  }
+  &::-webkit-scrollbar-thumb {
+    height: 10%;
+    background: #4ab8c5;
+    border-radius: 10px;
+  }
+}
+* {
+  box-sizing: border-box;
 }
 button {
   outline: none;

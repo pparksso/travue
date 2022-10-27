@@ -46,9 +46,8 @@
             <p>{{ data.desc }}</p>
           </div>
         </div>
-        <!-- <div class="commentWrap">
-          {% if userInfo %}
-          <div class="inputBox">
+        <div class="commentWrap">
+          <!-- <div class="inputBox">
             <label
               ><input
                 type="text"
@@ -60,33 +59,19 @@
             <button class="commentAddBtn" data-no="{{item.no}}">
               <span>등록</span>
             </button>
-          </div>
-          {% endif %}
-          <div class="commentBox" data-no="{{item.no}}">
-            {% for comment in comments %} {% if item.no == comment.contentsNo %}
-            <div
-              class="comment"
-              data-no="{{comment.contentsNo}}"
-              data-commentno="{{comment.no}}"
-            >
-              {% if userInfo.id == comment.id %}
+          </div> -->
+          <div class="commentBox">
+            <div class="comment" v-for="com in comment" :key="com">
               <div class="commentLeft">
-                <span class="userNickname"> {{ comment.nickname }} </span>
-                <p>{{ comment.comment }}</p>
+                <span class="userNickname"> {{ com.nickname }} </span>
+                <p>{{ com.comment }}</p>
               </div>
-              <button class="commentDelBtn" data-commentno="{{comment.no}}">
+              <!-- <button class="commentDelBtn">
                 <span class="material-icons"> close </span>
-              </button>
-              {% else %}
-              <div class="commentLeft">
-                <span class="userNickname"> {{ comment.nickname }} </span>
-                <p>{{ comment.comment }}</p>
-              </div>
-              {% endif %}
+              </button> -->
             </div>
-            {% endif %} {% endfor %}
           </div>
-        </div> -->
+        </div>
       </div>
     </div>
   </div>
@@ -108,12 +93,18 @@ export default {
   data() {
     return {
       data: {},
+      comment: [],
     };
   },
   created() {
     this.items.getPosts[0].map((item) => {
       if (item.no == this.post.getPostId) {
         this.data = item;
+      }
+    });
+    this.items.getComments[0].map((item) => {
+      if (item.no == this.post.getPostId) {
+        this.comment.push(item);
       }
     });
   },
