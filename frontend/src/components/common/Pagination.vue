@@ -1,19 +1,23 @@
 <template>
   <div class="pagination">
     <ul class="list">
-      <li v-if="preMove(start)">
+      <li
+        v-if="calcPage.preMove(start)"
+        @click="sendNum(start - 1)"
+        :class="(isClicked = on)"
+      >
         <button class="preBtn">
           <span class="material-icons"> chevron_left </span>
         </button>
       </li>
       <li
-        v-for="page in pageArr(start, end)"
+        v-for="page in calcPage.pageArr(start, end)"
         :key="page"
-        @click="$emit('pageNum', page)"
+        @click="sendNum(page)"
       >
         <button>{{ page }}</button>
       </li>
-      <li v-if="nextMove(end, total)">
+      <li v-if="calcPage.nextMove(end, total)" @click="sendNum(end + 1)">
         <button class="nextBtn">
           <span class="material-icons"> chevron_right </span>
         </button>
@@ -23,30 +27,20 @@
 </template>
 
 <script setup>
-import {preMove, nextMove, pageArr} from "@/unit/pagination";
-import {defineProps, watch} from "vue";
-const props = defineProps({
+import calcPage from "@/utils/pagination";
+import {defineProps} from "vue";
+import {mainStore} from "@/store/contents";
+const main = mainStore();
+
+defineProps({
   start: Number,
   total: Number,
   end: Number,
   currentPage: Number,
 });
-
-console.log({...props});
-
-watch(props, (newProps) => {
-  console.log({...newProps});
-});
-
-// const startPage = props.start;
-// const totalPage = props.total;
-// const endPage = props.end;
-// console.log(
-//   startPage.value,
-//   totalPage.value,
-//   endPage.value,
-//   nextMove(endPage.value, totalPage.value)
-// );
+function sendNum(num) {
+  main.getPageNum(num);
+}
 </script>
 
 <style lang="scss" scoped>

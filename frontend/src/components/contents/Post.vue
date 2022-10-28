@@ -1,7 +1,7 @@
 <template>
   <li
     class="post"
-    v-for="item in items.getPosts[0]"
+    v-for="item in contents[0]"
     :key="item.title"
     @click="post.clickPost(item.no)"
   >
@@ -30,21 +30,13 @@
   </li>
 </template>
 
-<script>
+<script setup>
 import {mainStore} from "@/store/contents";
 import {postStore} from "@/store/popup";
-export default {
-  // eslint-disable-next-line vue/multi-word-component-names
-  name: "Post",
-  setup() {
-    const items = mainStore();
-    const post = postStore();
-    return {
-      items,
-      post,
-    };
-  },
-};
+import {storeToRefs} from "pinia";
+const main = mainStore();
+const post = postStore();
+const {contents} = storeToRefs(main);
 </script>
 
 <style lang="scss" scoped>

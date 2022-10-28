@@ -26,6 +26,7 @@ router.get("/index", async (req, res) => {
     if (page > totalPage) {
       return res.status(404).json({ message: "찾을 수 없는 페이지입니다." });
     }
+    console.log(startPage, minPage, totalPage);
     res.json({ startPage, minPage, totalPage, lastPage, page, userInfo: req.user, contents, comments });
   } catch (err) {
     res.redirect("500");
