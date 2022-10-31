@@ -12,55 +12,49 @@ router.post("/join", (req, res) => {
   const id = req.body.id;
   const pw = req.body.pw;
   const nickname = req.body.nickname;
-  const pwCheck = req.body.pwCheck;
-  if (pw !== pwCheck) {
-    res.json({ pwCheck: false });
-  }
-  if (pw === pwCheck) {
-    bcrypt.hash(pw, saltRounds, (err, hash) => {
-      countDb.findOne({ name: "user" }, (err, result) => {
-        const userNum = result.count + 1;
-        if (err) {
-          res.redirect("500");
-        }
-        userDb.create(
-          {
-            userNum: userNum,
-            id: id,
-            pw: hash,
-            nickname: nickname,
-            heart: [],
-          },
-          (err, result) => {
-            if (err) {
-              res.redirect("500");
-            }
-            countDb.updateOne(
-              { name: "user" },
-              {
-                $inc: {
-                  count: 1,
-                },
-              },
-              (err, result) => {
-                if (err) {
-                  res.redirect("500");
-                }
-              }
-            );
+  bcrypt.hash(pw, saltRounds, (err, hash) => {
+    countDb.findOne({ name: "user" }, (err, result) => {
+      const userNum = result.count + 1;
+      if (err) {
+        res.status(500).json({ message: "서버에러" });
+      }
+      userDb.create(
+        {
+          userNum: userNum,
+          id: id,
+          pw: hash,
+          nickname: nickname,
+          heart: [],
+        },
+        (err, result) => {
+          if (err) {
+            res.status(500).json({ message: "서버 에러" });
           }
-        );
-        res.json({ isjoin: true });
-      });
+          countDb.updateOne(
+            { name: "user" },
+            {
+              $inc: {
+                count: 1,
+              },
+            },
+            (err, result) => {
+              if (err) {
+                res.status(500).json({ message: "서버 에러" });
+              }
+            }
+          );
+        }
+      );
+      res.json({ isjoin: true });
     });
-  }
+  });
 });
 
 router.post("/idcheck", (req, res) => {
   const id = req.body.id;
   userDb.findOne({ id: id }, (err, result) => {
     if (err) {
-      res.redirect("500");
+      res.status(500).json({ message: "서버에러" });
     }
     if (!result) {
       res.json({ idCheck: true });
@@ -73,12 +67,12 @@ router.post("/nicknamecheck", (req, res) => {
   const nickname = req.body.nickname;
   userDb.findOne({ nickname: nickname }, (err, result) => {
     if (err) {
-      res.redirect("500");
+      res.status(500).json({ message: "서버에러" });
     }
     if (!result) {
-      res.json({ isNicknameCheck: true });
+      res.json({ isNickname: true });
     } else {
-      res.json({ isNicknameCheck: false });
+      res.json({ isNickname: false });
     }
   });
 });

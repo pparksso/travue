@@ -6,6 +6,29 @@ import req from "./axiosInstance";
 function getPosts(num) {
   return req.get(`/index?page=${num}`);
 }
-
-const userApi = {getPosts};
+/**
+ * 가입 시 중복 아이디 체크
+ */
+function idCheck(id) {
+  return req.post("/user/idcheck", {
+    id,
+  });
+}
+/**
+ * 가입 시 닉네임 체크
+ */
+function nicknameCheck(nickname) {
+  return req.post("/user/nicknamecheck", {nickname});
+}
+/**
+ * 회원 가입
+ */
+function sendSignUp(id, nickname, pw) {
+  return req.post("/user/join", {
+    id,
+    nickname,
+    pw,
+  });
+}
+const userApi = {getPosts, idCheck, nicknameCheck, sendSignUp};
 export default userApi;

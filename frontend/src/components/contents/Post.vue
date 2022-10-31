@@ -55,7 +55,7 @@ li {
       overflow: hidden;
       img {
         width: 100%;
-        height: auto;
+        height: 300px;
         transition: all 0.5s ease-in-out;
         object-fit: cover;
         border-radius: 10px 10px 0 0;

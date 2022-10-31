@@ -60,6 +60,10 @@ body {
 * {
   box-sizing: border-box;
 }
+a {
+  text-decoration: none;
+  color: inherit;
+}
 button {
   outline: none;
   border: none;

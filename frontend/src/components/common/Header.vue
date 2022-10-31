@@ -2,7 +2,7 @@
   <header>
     <Nav />
     <div class="logo">
-      <h1>Travel Diary</h1>
+      <router-link to="/"><h1>Travel Diary</h1></router-link>
     </div>
   </header>
 </template>

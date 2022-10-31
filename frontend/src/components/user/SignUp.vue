@@ -11,26 +11,28 @@
         <div class="mid">
           <input
             type="text"
-            placeholder="ID (6자 이상)"
-            v-model="userId"
+            placeholder="ID (영어, 숫자, 6자 이상)"
+            v-model.trim="userId"
             minlength="6"
             maxlength="16"
-            @blur="idCheck"
+            @blur="idCheck()"
           />
           <div class="check">
-            <!-- <p class="ok">사용할 수 있는 아이디입니다.</p>
-            <p class="no">사용할 수 없는 아이디입니다.</p> -->
+            <p class="ok" v-if="idOk">사용할 수 있는 아이디입니다.</p>
+            <p class="no" v-if="idNo">사용할 수 없는 아이디입니다.</p>
           </div>
           <input
             type="text"
             placeholder="NICKNAME (2자 이상)"
-            v-model="userNickname"
             minlength="2"
             maxlength="12"
+            :value="nickname"
+            @input="nickname = $event.target.value"
+            @blur="nicknameCheck()"
           />
           <div class="check">
-            <!-- <p class="ok">사용할 수 있는 닉네임입니다.</p>
-            <p p class="no">사용할 수 없는 닉네임입니다.</p> -->
+            <p class="ok" v-if="nicknameOk">사용할 수 있는 닉네임입니다.</p>
+            <p p class="no" v-if="nicknameNo">사용할 수 없는 닉네임입니다.</p>
           </div>
           <input
             type="password"
@@ -38,6 +40,7 @@
             v-model="userPw"
             minlength="8"
             maxlength="20"
+            @blur="samePw()"
           />
           <input
             type="password"
@@ -45,50 +48,99 @@
             v-model="userPw02"
             minlength="8"
             maxlength="20"
+            @keyup="samePw()"
           />
           <div class="check">
-            <!-- <p p class="no">비밀번호를 다시 한번 확인해 주세요.</p> -->
+            <p class="ok" v-if="pwOk">비밀번호가 일치합니다.</p>
+            <p class="no" v-if="pwNo">비밀번호를 다시 한번 확인해 주세요.</p>
           </div>
         </div>
         <div class="bottom">
-          <button><span>SIGN UP</span></button>
+          <button @click="sendForm()"><span>SIGN UP</span></button>
         </div>
       </div>
     </div>
   </div>
 </template>
 
-<script>
+<script setup>
+import {ref} from "vue";
 import {signUpStore} from "@/store/popup";
+import {joinStore} from "@/store/user";
+import {storeToRefs} from "pinia";
 
-export default {
-  name: "SignUp",
-  data() {
-    return {
-      userId: "",
-      userNickname: "",
-      userPw: "",
-      userPw02: "",
-    };
-  },
-  setup() {
-    const signUp = signUpStore();
-    return {
-      signUp,
-    };
-  },
-  methods: {
-    idCheck() {
-      const regExp = /[ㄱ-ㅎㅏ-ㅣ가-힣]/g;
-      if (regExp.test(this.userId)) {
-        alert("영어, 숫자만 가능합니다.");
-      }
-    },
-    closeBtn() {
-      this.signUp.close();
-    },
-  },
-};
+let userId = ref("");
+let nickname = ref("");
+let userPw = ref("");
+let userPw02 = ref("");
+let pwOk = ref(false);
+let pwNo = ref(false);
+const signUp = signUpStore();
+const join = joinStore();
+const {idOk, idNo, nicknameOk, nicknameNo} = storeToRefs(join);
+
+// 팝업창 닫기
+function closeBtn() {
+  signUp.close();
+}
+// 아이디 체크
+function idCheck() {
+  const regExp = /[ㄱ-ㅎㅏ-ㅣ가-힣]/g;
+  if (this.userId.length < 6 || regExp.test(this.userId)) {
+    this.userId = "";
+    join.idStatusChange();
+    return false;
+  }
+  join.isId(this.userId);
+}
+// 닉네임 체크
+function nicknameCheck() {
+  if (this.nickname.length < 2) {
+    this.nickname = "";
+    join.nicknameStatusChange();
+    return false;
+  }
+  join.isNickname(this.nickname);
+}
+// 비밀번호 일치 체크
+function samePw() {
+  if (this.userPw.length < 8) {
+    alert("비밀번호는 8자 이상입니다.");
+    return false;
+  }
+  if (this.userPw == "" && this.userPw02 == "") {
+    this.pwOk = false;
+    this.pwNo = false;
+    return false;
+  }
+  if (this.userPw == this.userPw02) {
+    this.pwOk = true;
+    this.pwNo = false;
+    // return false;
+  }
+  if (this.userPw !== this.userPw02) {
+    this.pwOk = false;
+    this.pwNo = true;
+    return false;
+  }
+}
+// 폼 전송
+function sendForm() {
+  if (this.idOk == false) {
+    alert("아이디를 확인해주세요.");
+    return false;
+  }
+  if (this.nicknameOk == false) {
+    alert("닉네임을 확인해주세요.");
+    return false;
+  }
+  if (this.pwNo || this.pwOk == false) {
+    alert("비밀번호를 확인해주세요.");
+    return false;
+  }
+  join.sendSignUpForm(this.userId, this.nickname, this.userPw);
+  closeBtn();
+}
 </script>
 
 <style lang="scss" scope>

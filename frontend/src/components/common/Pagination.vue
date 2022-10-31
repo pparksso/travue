@@ -1,21 +1,18 @@
 <template>
   <div class="pagination">
     <ul class="list">
-      <li
-        v-if="calcPage.preMove(start)"
-        @click="sendNum(start - 1)"
-        :class="(isClicked = on)"
-      >
+      <li v-if="calcPage.preMove(start)" @click="sendNum(start - 1)">
         <button class="preBtn">
           <span class="material-icons"> chevron_left </span>
         </button>
       </li>
       <li
-        v-for="page in calcPage.pageArr(start, end)"
-        :key="page"
-        @click="sendNum(page)"
+        v-for="num in calcPage.pageArr(start, end)"
+        :key="num"
+        @click="sendNum(num)"
+        :class="{on: num == currentPage}"
       >
-        <button>{{ page }}</button>
+        <button>{{ num }}</button>
       </li>
       <li v-if="calcPage.nextMove(end, total)" @click="sendNum(end + 1)">
         <button class="nextBtn">
@@ -58,10 +55,12 @@ function sendNum(num) {
         width: 27px;
         height: 27px;
         font-size: 16px;
-        &.on {
+      }
+      &.on {
+        background-color: #333;
+        border-radius: 100%;
+        button {
           color: #fff;
-          background-color: #333;
-          border-radius: 100%;
         }
       }
     }
