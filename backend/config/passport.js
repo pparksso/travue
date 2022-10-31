@@ -4,23 +4,21 @@ module.exports = function (router) {
   const passport = require("passport");
   const LocalStrategy = require("passport-local").Strategy;
   const userDb = require("../db/user");
-  const countDb = require("../db/count");
-  const contentsDb = require("../db/contents");
 
   passport.use(
     new LocalStrategy(
       {
-        usernameField: "loginId",
-        passwordField: "loginPw",
+        usernameField: "id ",
+        passwordField: "pw",
         session: true,
         passReqToCallback: false,
       },
-      (loginId, loginPw, done) => {
-        userDb.findOne({ id: loginId }, (err, result) => {
+      (id, pw, done) => {
+        userDb.findOne({ id }, (err, result) => {
           if (err) return done(err);
           if (!result) return done(null, false, { message: "존재하지 않는 아이디입니다." });
           if (result) {
-            bcrypt.compare(loginPw, result.pw, (err, same) => {
+            bcrypt.compare(pw, result.pw, (err, same) => {
               if (same) {
                 return done(null, result, { message: "로그인되었습니다." });
               } else {

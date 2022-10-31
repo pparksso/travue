@@ -64,3 +64,12 @@ export const joinStore = defineStore("join", {
     },
   },
 });
+
+export const loginFormStore = defineStore("loginForm", {
+  state: () => ({}),
+  actions: {
+    sendLoginForm(id, pw) {
+      userApi.sendLogin(id, pw).then((res) => console.log(res));
+    },
+  },
+});

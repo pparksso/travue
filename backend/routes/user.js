@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router();
-const passport = require("../config/passport")(router);
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
+const passport = require("passport");
 const userDb = require("../db/user");
 const countDb = require("../db/count");
 const contentsDb = require("../db/contents");
@@ -76,14 +76,9 @@ router.post("/nicknamecheck", (req, res) => {
     }
   });
 });
-router.post(
-  "/login",
-  passport.authenticate("local", {
-    failureFlash: true,
-    failureRedirect: "/",
-    successRedirect: "/",
-  })
-);
+router.post("/login", passport.authenticate("local"), function (req, res) {
+  res.json({ isLogin: true });
+});
 router.get("/logout", (req, res) => {
   if (req.user) {
     req.session.destroy();

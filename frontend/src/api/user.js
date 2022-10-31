@@ -30,5 +30,14 @@ function sendSignUp(id, nickname, pw) {
     pw,
   });
 }
-const userApi = {getPosts, idCheck, nicknameCheck, sendSignUp};
+/**
+ * 로그인
+ */
+function sendLogin(id, pw) {
+  return req.post("/user/login", {
+    id,
+    pw,
+  });
+}
+const userApi = {getPosts, idCheck, nicknameCheck, sendSignUp, sendLogin};
 export default userApi;

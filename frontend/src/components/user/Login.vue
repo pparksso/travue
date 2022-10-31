@@ -9,35 +9,33 @@
           </button>
         </div>
         <div class="mid">
-          <input type="text" placeholder="ID" />
-          <input type="text" placeholder="PASSWORD" />
+          <input type="text" placeholder="ID" v-model="id" />
+          <input type="password" placeholder="PASSWORD" v-model="pw" />
         </div>
         <div class="bottom">
-          <button><span>LOGIN</span></button>
+          <button @click="sendLoginForm()"><span>LOGIN</span></button>
         </div>
       </div>
     </div>
   </div>
 </template>
 
-<script>
+<script setup>
 import {loginStore} from "@/store/popup";
+import {loginFormStore} from "@/store/user";
+import {ref} from "@vue/reactivity";
 
-export default {
-  // eslint-disable-next-line vue/multi-word-component-names
-  name: "Login",
-  setup() {
-    const login = loginStore();
-    return {
-      login,
-    };
-  },
-  methods: {
-    close() {
-      this.login.close();
-    },
-  },
-};
+let id = ref("");
+let pw = ref("");
+
+const login = loginStore();
+const loginForm = loginFormStore();
+function close() {
+  login.close();
+}
+function sendLoginForm() {
+  loginForm.sendLoginForm(id.value, pw.value);
+}
 </script>
 
 <style lang="scss" scoped>

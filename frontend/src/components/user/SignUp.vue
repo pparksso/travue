@@ -49,6 +49,7 @@
             minlength="8"
             maxlength="20"
             @keyup="samePw()"
+            @keydown.enter="sendForm()"
           />
           <div class="check">
             <p class="ok" v-if="pwOk">비밀번호가 일치합니다.</p>
