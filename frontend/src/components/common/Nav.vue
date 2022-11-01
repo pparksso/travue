@@ -1,34 +1,42 @@
 <template>
   <div class="nav">
-    <ul>
+    <ul v-if="isCookie">
+      <li><button>My tour</button></li>
+      <li><button>Logout</button></li>
+    </ul>
+    <ul v-else>
       <li><button @click="openLogin">Login</button></li>
       <li><button @click="openSignUp">Sign up</button></li>
     </ul>
   </div>
 </template>
 
-<script>
+<script setup>
 import {loginStore, signUpStore} from "@/store/popup";
-export default {
-  // eslint-disable-next-line vue/multi-word-component-names
-  name: "Nav",
-  setup() {
-    const login = loginStore();
-    const signUp = signUpStore();
-    return {
-      login,
-      signUp,
-    };
+import {computed, onMounted} from "@vue/runtime-core";
+import {useCookies} from "vue3-cookies";
+const signUp = signUpStore();
+const login = loginStore();
+const {cookies} = useCookies();
+onMounted(() => {
+  console.log(cookies.get("connect.sid"));
+});
+function openLogin() {
+  login.open();
+}
+function openSignUp() {
+  signUp.open();
+}
+const isCookie = computed({
+  get() {
+    return document.cookie;
   },
-  methods: {
-    openLogin() {
-      this.login.open();
-    },
-    openSignUp() {
-      this.signUp.open();
-    },
-  },
-};
+});
+// computed(() => {
+//   isCookie: () => {
+//     return document.cookie;
+//   };
+// });
 </script>
 
 <style lang="scss" scoped>

@@ -1,20 +1,21 @@
 module.exports = function (router) {
   const bcrypt = require("bcrypt");
-  const saltRounds = 10;
+  const flash = require("connect-flash");
   const passport = require("passport");
   const LocalStrategy = require("passport-local").Strategy;
   const userDb = require("../db/user");
+  router.use(flash());
 
   passport.use(
     new LocalStrategy(
       {
-        usernameField: "id ",
+        usernameField: "id",
         passwordField: "pw",
         session: true,
         passReqToCallback: false,
       },
       (id, pw, done) => {
-        userDb.findOne({ id }, (err, result) => {
+        userDb.findOne({ id: id }, (err, result) => {
           if (err) return done(err);
           if (!result) return done(null, false, { message: "존재하지 않는 아이디입니다." });
           if (result) {

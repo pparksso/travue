@@ -34,10 +34,14 @@ function sendSignUp(id, nickname, pw) {
  * 로그인
  */
 function sendLogin(id, pw) {
-  return req.post("/user/login", {
-    id,
-    pw,
-  });
+  return req.post(
+    "/user/login",
+    {
+      id,
+      pw,
+    },
+    {withCredentials: true}
+  );
 }
 const userApi = {getPosts, idCheck, nicknameCheck, sendSignUp, sendLogin};
 export default userApi;

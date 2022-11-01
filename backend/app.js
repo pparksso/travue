@@ -11,6 +11,7 @@ const { storage } = require("./config/cloudinary");
 const passport = require("./config/passport")(app);
 const session = require("express-session");
 const cors = require("cors");
+const options = { etag: false };
 
 const indexRouter = require("./routes");
 const createRouter = require("./routes/create.js");
@@ -18,20 +19,16 @@ const updateRouter = require("./routes/update.js");
 const userRouter = require("./routes/user.js");
 const heartRouter = require("./routes/heart.js");
 const commentRouter = require("./routes/comment.js");
-const options = { etag: false };
-
-// view engine setup
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 app.set("etag", false);
 
 app.use(
   cors({
-    credentials: true,
     origin: true,
+    credentials: true,
   })
 );
-app.use(cookieParser());
 app.use(
   session({
     resave: false,
@@ -39,11 +36,14 @@ app.use(
     secret: process.env.COOKIE_SECRET,
     cookie: {
       maxAge: 1000 * 60 * 60 * 24,
-      httpOnly: true,
-      secure: false,
+      httpOnly: false,
+      // domain: ".localhost:8080/",
+      // secure: true,
+      // sameSite: "none",
     },
   })
 );
+app.use(cookieParser(process.env.COOKIE_SECRET));
 app.use(passport.initialize());
 app.use(passport.session());
 app.disable("etag");
@@ -52,6 +52,8 @@ app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
+
+// view engine setup
 
 app.use("/", indexRouter);
 app.use("/create", createRouter);

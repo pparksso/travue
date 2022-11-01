@@ -7,6 +7,7 @@ export const joinStore = defineStore("join", {
     idNo: false,
     nicknameOk: false,
     nicknameNo: false,
+    loginStatus: "",
   }),
   actions: {
     isId(id) {
@@ -62,14 +63,37 @@ export const joinStore = defineStore("join", {
         })
         .catch((err) => console.log(err, "500 보내야함"));
     },
+    blankStatus() {
+      this.idOk = false;
+      this.idNo = false;
+      this.nicknameOk = false;
+      this.nicknameNo = false;
+    },
   },
 });
 
 export const loginFormStore = defineStore("loginForm", {
-  state: () => ({}),
+  state: () => ({
+    loginInfo: {},
+    loginMessage: {},
+  }),
   actions: {
     sendLoginForm(id, pw) {
-      userApi.sendLogin(id, pw).then((res) => console.log(res));
+      userApi
+        .sendLogin(id, pw)
+        .then((res) => {
+          const login = res.data.isLogin;
+          if (!login) {
+            this.loginInfo = res.data.info;
+            this.loginStatus = false;
+          } else {
+            this.loginStatus = true;
+            this.loginMessage = res.data.message;
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
   },
 });

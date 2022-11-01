@@ -9,11 +9,22 @@
           </button>
         </div>
         <div class="mid">
-          <input type="text" placeholder="ID" v-model="id" />
-          <input type="password" placeholder="PASSWORD" v-model="pw" />
+          <input
+            type="text"
+            placeholder="ID"
+            v-model="id"
+            ref="idRef"
+            name="id"
+          />
+          <input
+            type="password"
+            placeholder="PASSWORD"
+            v-model="pw"
+            name="pw"
+          />
         </div>
         <div class="bottom">
-          <button @click="sendLoginForm()"><span>LOGIN</span></button>
+          <button @click="loginForm.sendLoginForm(id, pw)">LOGIN</button>
         </div>
       </div>
     </div>
@@ -24,18 +35,42 @@
 import {loginStore} from "@/store/popup";
 import {loginFormStore} from "@/store/user";
 import {ref} from "@vue/reactivity";
+import {onMounted, watch} from "@vue/runtime-core";
+import {storeToRefs} from "pinia";
 
 let id = ref("");
 let pw = ref("");
+let idRef = ref();
 
 const login = loginStore();
 const loginForm = loginFormStore();
+let {loginInfo, loginStatus} = storeToRefs(loginForm);
+
+// 로그인 팝업 오픈 시 아이디인풋에 포커스 주는 함수
+onMounted(() => {
+  idRef.value.focus();
+});
 function close() {
+  id = "";
+  pw = "";
   login.close();
 }
-function sendLoginForm() {
-  loginForm.sendLoginForm(id.value, pw.value);
-}
+// function sendLoginForm() {
+//   loginForm.sendLoginForm(this.id, this.pw);
+// }
+watch(
+  () => loginStatus,
+  () => {
+    if (loginStatus) {
+      close();
+      return false;
+    } else {
+      alert(loginInfo.value);
+      loginStatus = "";
+      return false;
+    }
+  }
+);
 </script>
 
 <style lang="scss" scoped>
@@ -82,11 +117,9 @@ function sendLoginForm() {
         padding: 7px;
         background-color: #333;
         border-radius: 5px;
-        span {
-          font-size: 16px;
-          color: #fff;
-          font-weight: 500;
-        }
+        font-size: 16px;
+        color: #fff;
+        font-weight: 500;
       }
     }
   }

@@ -16,6 +16,7 @@
             minlength="6"
             maxlength="16"
             @blur="idCheck()"
+            ref="idRef"
           />
           <div class="check">
             <p class="ok" v-if="idOk">사용할 수 있는 아이디입니다.</p>
@@ -29,6 +30,7 @@
             :value="nickname"
             @input="nickname = $event.target.value"
             @blur="nicknameCheck()"
+            ref="nicknameRef"
           />
           <div class="check">
             <p class="ok" v-if="nicknameOk">사용할 수 있는 닉네임입니다.</p>
@@ -76,13 +78,25 @@ let userPw = ref("");
 let userPw02 = ref("");
 let pwOk = ref(false);
 let pwNo = ref(false);
+let idRef = ref();
+let nicknameRef = ref();
 const signUp = signUpStore();
 const join = joinStore();
 const {idOk, idNo, nicknameOk, nicknameNo} = storeToRefs(join);
 
+// onMounted(() => {
+//   console.log(idRef.);
+// });
 // 팝업창 닫기
 function closeBtn() {
   signUp.close();
+  join.blankStatus();
+  this.pwOk = false;
+  this.pwNo = false;
+  this.userId = "";
+  this.nickname = "";
+  this.userPw = "";
+  this.userPw02 = "";
 }
 // 아이디 체크
 function idCheck() {
@@ -90,6 +104,7 @@ function idCheck() {
   if (this.userId.length < 6 || regExp.test(this.userId)) {
     this.userId = "";
     join.idStatusChange();
+    idRef.value.focus();
     return false;
   }
   join.isId(this.userId);
@@ -99,6 +114,7 @@ function nicknameCheck() {
   if (this.nickname.length < 2) {
     this.nickname = "";
     join.nicknameStatusChange();
+    nicknameRef.value.focus();
     return false;
   }
   join.isNickname(this.nickname);
