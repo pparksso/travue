@@ -21,6 +21,7 @@
             placeholder="PASSWORD"
             v-model="pw"
             name="pw"
+            @keyup.enter="loginForm.sendLoginForm(id, pw)"
           />
         </div>
         <div class="bottom">
@@ -55,22 +56,14 @@ function close() {
   pw = "";
   login.close();
 }
-// function sendLoginForm() {
-//   loginForm.sendLoginForm(this.id, this.pw);
-// }
-watch(
-  () => loginStatus,
-  () => {
-    if (loginStatus) {
-      close();
-      return false;
-    } else {
-      alert(loginInfo.value);
-      loginStatus = "";
-      return false;
-    }
+
+watch(loginStatus, () => {
+  if (loginStatus) {
+    close();
+  } else {
+    alert(loginInfo.value);
   }
-);
+});
 </script>
 
 <style lang="scss" scoped>

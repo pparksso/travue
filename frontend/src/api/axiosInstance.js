@@ -5,6 +5,6 @@ const request = axios.create({
   //   "Access-Control-Allow-Origin": "http://localhost:3000",
   // },
   baseURL: "http://localhost:3000",
-  // withCredentials: true,
+  withCredentials: true,
 });
 export default request;

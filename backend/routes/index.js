@@ -5,9 +5,11 @@ const userDb = require("../db/user");
 const countDb = require("../db/count");
 const contentsDb = require("../db/contents");
 const commentsDb = require("../db/comments");
+const { loginCheck } = require("../routes/middleware");
 
-router.get("/index", async (req, res) => {
+router.get("/index", loginCheck, async (req, res, next) => {
   try {
+    ``;
     // 페이지네이션
     let page = parseInt(req.query.page);
     const size = 6;
@@ -26,7 +28,7 @@ router.get("/index", async (req, res) => {
     if (page > totalPage) {
       return res.status(404).json({ message: "찾을 수 없는 페이지입니다." });
     }
-    res.json({ startPage, minPage, totalPage, lastPage, page, userInfo: req.user, contents, comments });
+    res.json({ startPage, minPage, totalPage, lastPage, page, contents, comments, userInfo: req.user });
   } catch (err) {
     res.redirect("500");
   }

@@ -74,6 +74,7 @@ export const joinStore = defineStore("join", {
 
 export const loginFormStore = defineStore("loginForm", {
   state: () => ({
+    loginStatus: false,
     loginInfo: {},
     loginMessage: {},
   }),
@@ -94,6 +95,45 @@ export const loginFormStore = defineStore("loginForm", {
         .catch((err) => {
           console.log(err);
         });
+    },
+  },
+});
+
+export const logoutStore = defineStore("logout", {
+  state: () => ({
+    logoutState: false,
+  }),
+  actions: {
+    isLogout() {
+      userApi.logoutFetch().then((res) => {
+        const result = res.data.isLogout;
+        if (result) {
+          this.logoutState = true;
+          window.location.href = "/";
+        }
+      });
+    },
+  },
+});
+
+export const authStore = defineStore("auth", {
+  state: () => ({
+    isAuth: false,
+    user: {},
+  }),
+  actions: {
+    AuthFetch() {
+      userApi.authFetch().then((res) => {
+        console.log(res.data);
+        const result = res.data.auth;
+        const userInfo = res.data.userInfo;
+        if (result) {
+          this.isAuth = true;
+          this.user = userInfo;
+        } else {
+          this.isAuth = false;
+        }
+      });
     },
   },
 });

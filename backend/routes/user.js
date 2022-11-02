@@ -7,7 +7,7 @@ const userDb = require("../db/user");
 const countDb = require("../db/count");
 const contentsDb = require("../db/contents");
 const commentsDb = require("../db/comments");
-const { isLoggedIn, isNotLoggedIn } = require("../routes/middleware");
+const { loginCheck } = require("../routes/middleware");
 
 router.post("/join", (req, res) => {
   const id = req.body.id;
@@ -78,7 +78,7 @@ router.post("/nicknamecheck", (req, res) => {
   });
 });
 
-router.post("/login", isNotLoggedIn, (req, res, next) => {
+router.post("/login", (req, res, next) => {
   passport.authenticate("local", (authError, user, info) => {
     if (authError) {
       console.error(authError);
@@ -92,7 +92,7 @@ router.post("/login", isNotLoggedIn, (req, res, next) => {
         console.error(loginError);
         return next(loginError);
       }
-      res.json({ message: "로그인 되었습니다.", isLogin: true });
+      res.json({ message: "로그인 되었습니다.", isLogin: true, userInfo: req.user });
     });
   })(req, res, next);
 });
@@ -100,7 +100,15 @@ router.post("/login", isNotLoggedIn, (req, res, next) => {
 router.get("/logout", (req, res) => {
   if (req.user) {
     req.session.destroy();
-    res.send(`<script>alert("로그아웃 되었습니다."); location.href= "/"</script>`);
+    res.json({ isLogout: true });
+  }
+});
+
+router.get("/auth", (req, res) => {
+  if (req.user) {
+    res.json({ userInfo: req.user, auth: true });
+  } else {
+    res.json({ auth: false });
   }
 });
 

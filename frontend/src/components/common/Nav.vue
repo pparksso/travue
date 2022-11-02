@@ -1,8 +1,12 @@
 <template>
   <div class="nav">
-    <ul v-if="isCookie">
+    <ul v-if="loginStatus || isAuth">
+      <router-link to="/new"
+        ><li><button>New</button></li></router-link
+      >
       <li><button>My tour</button></li>
-      <li><button>Logout</button></li>
+      <li><button>My page</button></li>
+      <li><button @click="clickedLogout">Logout</button></li>
     </ul>
     <ul v-else>
       <li><button @click="openLogin">Login</button></li>
@@ -13,30 +17,26 @@
 
 <script setup>
 import {loginStore, signUpStore} from "@/store/popup";
-import {computed, onMounted} from "@vue/runtime-core";
-import {useCookies} from "vue3-cookies";
+import {loginFormStore, authStore, logoutStore} from "@/store/user";
+import {storeToRefs} from "pinia";
+
 const signUp = signUpStore();
 const login = loginStore();
-const {cookies} = useCookies();
-onMounted(() => {
-  console.log(cookies.get("connect.sid"));
-});
+const loginForm = loginFormStore();
+const auth = authStore();
+const logout = logoutStore();
+
+const {loginStatus} = storeToRefs(loginForm);
+const {isAuth} = storeToRefs(auth);
 function openLogin() {
   login.open();
 }
 function openSignUp() {
   signUp.open();
 }
-const isCookie = computed({
-  get() {
-    return document.cookie;
-  },
-});
-// computed(() => {
-//   isCookie: () => {
-//     return document.cookie;
-//   };
-// });
+function clickedLogout() {
+  logout.isLogout();
+}
 </script>
 
 <style lang="scss" scoped>

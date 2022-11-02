@@ -33,12 +33,18 @@ module.exports = function (router) {
   );
 
   passport.serializeUser((user, done) => {
+    console.log(user.id);
     done(null, user.id);
   });
   passport.deserializeUser((id, done) => {
-    userDb.findOne({ id: id }, (err, result) => {
-      done(null, result);
-    });
+    console.log("de :" + id);
+    userDb
+      .findOne({ id: id })
+      .then((user) => done(null, user))
+      .catch((err) => done(err));
+    // userDb.findOne({ id: id }, (err, result) => {
+    //   done(null, result);
+    // });
   });
   return passport;
 };

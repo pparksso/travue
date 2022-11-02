@@ -10,14 +10,6 @@ const contentsDb = require("../db/contents");
 
 const fileUpload = multer({ storage: storage });
 
-router.get("/", (req, res) => {
-  if (req.user) {
-    res.render("create", { title: "New" });
-  } else {
-    res.send(`<script>alert("시간이 지나 로그인이 해제되었습니다. 다시 로그인 해주세요."); location.href = "/"</script>`);
-  }
-});
-
 router.post("/sendimg", fileUpload.single("image"), (req, res) => {
   res.json({
     cloudinaryImgSrc: req.file.path,
@@ -38,7 +30,7 @@ router.post("/new", fileUpload.single("image"), async (req, res) => {
     countDb.findOne({ name: "total" }, (err, result) => {
       const no = result.count + 1;
       if (err) {
-        res.redirect("500");
+        console.log(err);
       }
       contentsDb.create(
         {
@@ -55,7 +47,7 @@ router.post("/new", fileUpload.single("image"), async (req, res) => {
         },
         (err, result) => {
           if (err) {
-            res.redirect("500");
+            console.log(err);
           }
           countDb.updateOne(
             { name: "total" },
@@ -66,7 +58,7 @@ router.post("/new", fileUpload.single("image"), async (req, res) => {
             },
             (err, result) => {
               if (err) {
-                res.redirect("500");
+                console.log(err);
               }
             }
           );
@@ -75,7 +67,7 @@ router.post("/new", fileUpload.single("image"), async (req, res) => {
       res.json({ isCreate: true });
     });
   } else {
-    res.send(`<script>alert("시간이 지나 로그인이 해제되었습니다. 다시 로그인 해주세요."); location.href = "/"</script>`);
+    res.json({ auth: false });
   }
 });
 module.exports = router;

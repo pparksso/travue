@@ -43,5 +43,27 @@ function sendLogin(id, pw) {
     {withCredentials: true}
   );
 }
-const userApi = {getPosts, idCheck, nicknameCheck, sendSignUp, sendLogin};
+
+/**
+ * 로그아웃
+ */
+function logoutFetch() {
+  return req.get("/user/logout");
+}
+
+/**
+ * 로그인 체크
+ */
+function authFetch() {
+  return req.get("/user/auth");
+}
+const userApi = {
+  getPosts,
+  idCheck,
+  nicknameCheck,
+  sendSignUp,
+  sendLogin,
+  logoutFetch,
+  authFetch,
+};
 export default userApi;

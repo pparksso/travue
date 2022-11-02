@@ -1,6 +1,7 @@
 import {defineStore} from "pinia";
 
 import userApi from "@/api/user";
+import contentsApi from "@/api/contents";
 
 export const mainStore = defineStore("main", {
   state: () => ({
@@ -41,6 +42,37 @@ export const mainStore = defineStore("main", {
     },
     getComments() {
       return this.comments;
+    },
+  },
+});
+
+export const newStore = defineStore("new", {
+  state: () => ({
+    src: "",
+    cloudinaryFileName: "",
+  }),
+  actions: {
+    sendImgFetch(sendImgData) {
+      contentsApi
+        .sendImg(sendImgData)
+        .then((res) => {
+          this.src = res.data.cloudinaryImgSrc;
+          this.cloudinaryFileName = res.data.cloudinaryFileName;
+        })
+        .catch((err) => console.log(err));
+    },
+    sendNewFetch({title, date, location, desc, imgUrl, fileName}) {
+      contentsApi
+        .sendCreate({title, date, location, desc, imgUrl, fileName})
+        .then((res) => {
+          if (res.data.isCreate) {
+            this.src = "";
+            window.location.href = "/";
+          } else {
+            alert("다시 입력해주세요");
+          }
+        })
+        .catch((err) => console.log(err));
     },
   },
 });

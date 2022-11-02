@@ -6,26 +6,19 @@ const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const env = require("dotenv").config();
 const dbConnect = require("./config/mongoose");
-const { cloudinary } = require("./config/cloudinary");
-const { storage } = require("./config/cloudinary");
+const cloudinary = require("./config/cloudinary");
 const passport = require("./config/passport")(app);
 const session = require("express-session");
 const cors = require("cors");
 const options = { etag: false };
 
-const indexRouter = require("./routes");
-const createRouter = require("./routes/create.js");
-const updateRouter = require("./routes/update.js");
-const userRouter = require("./routes/user.js");
-const heartRouter = require("./routes/heart.js");
-const commentRouter = require("./routes/comment.js");
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 app.set("etag", false);
 
 app.use(
   cors({
-    origin: true,
+    origin: "http://localhost:8080",
     credentials: true,
   })
 );
@@ -38,7 +31,7 @@ app.use(
       maxAge: 1000 * 60 * 60 * 24,
       httpOnly: false,
       // domain: ".localhost:8080/",
-      // secure: true,
+      secure: false,
       // sameSite: "none",
     },
   })
@@ -54,7 +47,12 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
 
 // view engine setup
-
+const indexRouter = require("./routes");
+const createRouter = require("./routes/create.js");
+const updateRouter = require("./routes/update.js");
+const userRouter = require("./routes/user.js");
+const heartRouter = require("./routes/heart.js");
+const commentRouter = require("./routes/comment.js");
 app.use("/", indexRouter);
 app.use("/create", createRouter);
 app.use("/update", updateRouter);

@@ -1,12 +1,13 @@
 <template>
   <Header />
-  <Login v-if="login.loginState" />
-  <SignUp v-if="signUp.signUpState" />
-  <PostPopup v-if="post.openPost" />
+  <Login v-if="loginState" />
+  <SignUp v-if="signUpState" />
+  <PostPopup v-if="openPost" />
   <router-view></router-view>
   <Footer />
 </template>
-<script>
+
+<script setup>
 import Header from "./components/common/Header.vue";
 import Login from "./components/user/Login.vue";
 import SignUp from "./components/user/SignUp.vue";
@@ -14,27 +15,17 @@ import Footer from "./components/common/Footer.vue";
 import {loginStore, signUpStore} from "./store/popup";
 import PostPopup from "./components/contents/PostPopup.vue";
 import {postStore} from "@/store/popup";
-export default {
-  name: "App",
-  components: {
-    Header,
-    Login,
-    SignUp,
-    PostPopup,
-    Footer,
-  },
-  setup() {
-    const login = loginStore();
-    const signUp = signUpStore();
-    const post = postStore();
-    return {
-      login,
-      signUp,
-      post,
-    };
-  },
-};
+import {storeToRefs} from "pinia";
+
+const loginPopupStore = loginStore();
+const signUpPopupStore = signUpStore();
+const postPopupStore = postStore();
+
+const {loginState} = storeToRefs(loginPopupStore);
+const {signUpState} = storeToRefs(signUpPopupStore);
+const {openPost} = storeToRefs(postPopupStore);
 </script>
+
 <style lang="scss">
 @import url("~reset-css/reset.css");
 @import url("https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500;600;700;800&family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap");
