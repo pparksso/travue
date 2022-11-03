@@ -131,15 +131,15 @@ router.get("/mytour", async (req, res) => {
       const minPage = totalPage <= lastPage ? totalPage : lastPage;
       if (totalContents) {
         if (page > totalPage) {
-          return res.redirect("/");
+          return res.status(404).json({ message: "찾을 수 없는 페이지입니다." });
         }
       }
-      await res.render("mytour", { startPage: startPage, minPage: minPage, page: page, totalPage: totalPage, userInfo: req.user, title: "My tour", list: contents, comments: comments });
+      await res.json({ startPage, minPage, totalPage, lastPage, page, contents, comments, userInfo: req.user });
     } else {
-      res.send(`<script>alert("시간이 지나 로그인이 해제되었습니다. 다시 로그인 해주세요."); location.href = "/"</script>`);
+      res.json({ auth: false });
     }
   } catch (err) {
-    res.redirect("500");
+    console.log(err);
   }
 });
 router.get("/mypage", (req, res) => {

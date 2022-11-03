@@ -16,12 +16,12 @@ router.get("/", (req, res) => {
   if (req.user) {
     contentsDb.findOne({ no: editNum }, (err, result) => {
       if (err) {
-        res.redirect("500");
+        res.status(500).json({ message: "서버에러" });
       }
-      res.render("update", { title: "Update", list: result });
+      res.json({ result });
     });
   } else {
-    res.send(`<script>alert("시간이 지나 로그인이 해제되었습니다. 다시 로그인 해주세요."); location.href = "/"</script>`);
+    res.json({ auth: false });
   }
 });
 
@@ -49,12 +49,11 @@ router.post("/done", async (req, res) => {
     );
     res.json({ update: true });
   } catch (err) {
-    res.redirect("500");
+    console.log(err);
   }
 });
 
-router.post("/sendimg", fileUpload.single("updateImage"), (req, res) => {
-  // cloudinary.uploader.destroy(req.deleteFileName);
+router.post("/sendimg", fileUpload.single("image"), (req, res) => {
   res.json({
     cloudinaryImgSrc: req.file.path,
     cloudinaryFileName: req.file.filename,
@@ -63,14 +62,14 @@ router.post("/sendimg", fileUpload.single("updateImage"), (req, res) => {
 
 router.post("/delete", async (req, res) => {
   try {
-    const no = parseInt(req.body.no);
+    const no = Number(req.body.no);
     const result = await contentsDb.findOne({ no: no });
     await cloudinary.uploader.destroy(result.fileName);
     await contentsDb.deleteOne({ no: no });
     await commentsDb.deleteMany({ contentsNo: no });
     res.json({ delete: true });
   } catch (err) {
-    res.redirect("500");
+    console.log(err);
   }
 });
 module.exports = router;

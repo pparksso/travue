@@ -24,6 +24,34 @@ function sendCreate({title, date, location, desc, imgUrl, fileName}) {
     fileName,
   });
 }
-const contentsApi = {sendImg, sendCreate};
+
+/**
+ * 수정페이지로 이동
+ */
+function editPetch(num) {
+  return req.get(`/update/?edit=${num}`);
+}
+
+/**
+ * 포스트 수정
+ */
+function updatePost({title, date, location, desc, imgUrl, fileName, no}) {
+  return req.post("/update/done", {
+    title,
+    date,
+    location,
+    desc,
+    imgUrl,
+    fileName,
+    no,
+  });
+}
+/**
+ * 포스트 삭제
+ */
+function deletePost(no) {
+  return req.post("/update/delete", {no: no});
+}
+const contentsApi = {sendImg, sendCreate, editPetch, updatePost, deletePost};
 
 export default contentsApi;

@@ -1,7 +1,7 @@
 <template>
-  <section id="create" class="subSection">
+  <section id="update" class="subSection">
     <div class="title">
-      <h1>Create Post</h1>
+      <h1>Edit Post</h1>
     </div>
     <form action="" method="POST" enctype="multipart/form-data">
       <div class="imgBox">
@@ -32,7 +32,8 @@
             type="text"
             name="date"
             id="date"
-            :value="date"
+            :value="editContents.date"
+            @input="date"
             readonly
             required
           /><span>📅</span></label
@@ -58,6 +59,7 @@
             id="title"
             required
             maxlength="20"
+            :value="editContents.title"
             @input="title = $event.target.value"
         /></label>
       </div>
@@ -68,6 +70,7 @@
             type="text"
             name="location"
             id="location"
+            :value="editContents.location"
             required
             maxlength="20"
             @input="location = $event.target.value"
@@ -81,14 +84,15 @@
           rows="10"
           placeholder="내용을 입력하세요"
           required
+          :value="editContents.desc"
           @input="desc = $event.target.value"
         ></textarea>
       </div>
       <div class="btns">
-        <button id="createBtn" @click.prevent="create()">
-          <span>추가</span>
+        <button id="createBtn" @click.prevent="update()">
+          <span>수정</span>
         </button>
-        <button type="reset" id="resetBtn" @click="resetCreate()">
+        <button type="reset" id="resetBtn" @click="resetUpdate()">
           <span>취소</span>
         </button>
       </div>
@@ -97,13 +101,20 @@
 </template>
 
 <script setup>
+import {defineProps} from "vue";
 import {ref} from "@vue/reactivity";
 import {DatePicker} from "v-calendar";
-import {newStore} from "@/store/contents";
+import {editStore} from "@/store/contents";
 import {storeToRefs} from "pinia";
 
-const newPinia = newStore();
-const {src, cloudinaryFileName} = storeToRefs(newPinia);
+const edit = editStore();
+const {src, cloudinaryFileName, editContents} = storeToRefs(edit);
+
+const props = defineProps({
+  num: String,
+});
+
+edit.goEditPage(props.num);
 
 let date = ref("");
 let title = ref("");
@@ -136,22 +147,28 @@ async function sendImg() {
     // for (const pair of sendImgData.entries()) {
     //   console.log(`${pair[0]}, ${pair[1]}`);
     // }
-    newPinia.sendImgFetch(sendImgData);
+    edit.sendImgFetch(sendImgData);
   } catch (err) {
     console.log(err);
   }
 }
 
 //글 정보 보내기
-function create() {
-  newPinia.sendNewFetch({
+function update() {
+  edit.sendUpdateFetch({
     title: title.value,
     date: date.value,
     location: location.value,
     desc: desc.value,
     imgUrl: src.value,
     fileName: cloudinaryFileName.value,
+    no: props.num,
   });
+}
+
+// 수정 취소하고 메인페이지로 이동
+function resetUpdate() {
+  window.location.href = "/";
 }
 </script>
 

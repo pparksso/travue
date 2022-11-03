@@ -1,6 +1,8 @@
 import {createRouter, createWebHistory} from "vue-router";
 import MainView from "../views/MainView.vue";
 import New from "../components/page/New";
+import MyTourView from "../views/MyTourView.vue";
+import Edit from "../components/page/Edit.vue";
 
 import {storeToRefs} from "pinia";
 import {authStore} from "@/store/user";
@@ -11,10 +13,29 @@ const routes = [
     name: "main",
     component: MainView,
   },
+  {path: "/mytour", name: "mytour", component: MyTourView},
   {
     path: "/new",
     name: "new",
     component: New,
+    beforeEnter: (to, from, next) => {
+      const auth = authStore();
+      const {isAuth} = storeToRefs(auth);
+      if (isAuth) {
+        next();
+      } else {
+        alert(
+          "로그인이 해제되었습니다. 다시 로그인해주세요. 로그인 후 이용가능합니다."
+        );
+        next("/");
+      }
+    },
+  },
+  {
+    path: "/edit/:num",
+    name: "edit",
+    props: true,
+    component: Edit,
     beforeEnter: (to, from, next) => {
       const auth = authStore();
       const {isAuth} = storeToRefs(auth);

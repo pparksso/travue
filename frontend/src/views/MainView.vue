@@ -2,7 +2,7 @@
   <div class="main">
     <div class="container">
       <ul>
-        <Post />
+        <Post :contents="contents" />
       </ul>
       <Pagination
         :start="startPage"
@@ -24,7 +24,8 @@ const main = mainStore();
 
 // 포스트 갖고오기
 main.getContents();
-const {startPage, totalPage, minPage, page, pageNum} = storeToRefs(main);
+const {startPage, totalPage, minPage, page, pageNum, contents} =
+  storeToRefs(main);
 
 // 페이지가 바뀌면 다시 포스트 호출
 watch(pageNum, () => {

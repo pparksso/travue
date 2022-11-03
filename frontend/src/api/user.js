@@ -7,6 +7,12 @@ function getPosts(num) {
   return req.get(`/index?page=${num}`);
 }
 /**
+ * mytour 포스트, 페이지 정보 가져오기
+ */
+function getMyPosts(num) {
+  return req.get(`/user/mytour?page=${num}`);
+}
+/**
  * 가입 시 중복 아이디 체크
  */
 function idCheck(id) {
@@ -65,5 +71,6 @@ const userApi = {
   sendLogin,
   logoutFetch,
   authFetch,
+  getMyPosts,
 };
 export default userApi;

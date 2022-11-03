@@ -15,7 +15,7 @@ module.exports = {
     "vue/multi-word-component-names": [
       "error",
       {
-        ignores: ["Pagination", "Post", "Login", "Nav", "New"],
+        ignores: ["Pagination", "Post", "Login", "Nav", "New", "Edit"],
       },
     ],
     "no-console": process.env.NODE_ENV === "production" ? "warn" : "off",

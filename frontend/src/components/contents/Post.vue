@@ -31,12 +31,13 @@
 </template>
 
 <script setup>
-import {mainStore} from "@/store/contents";
+import {defineProps} from "vue";
 import {postStore} from "@/store/popup";
-import {storeToRefs} from "pinia";
-const main = mainStore();
 const post = postStore();
-const {contents} = storeToRefs(main);
+
+defineProps({
+  contents: Array,
+});
 </script>
 
 <style lang="scss" scoped>

@@ -73,42 +73,57 @@
           </div>
         </div>
       </div>
+      <div class="bottom" v-if="btns">
+        <div class="btns">
+          <router-link :to="{name: 'edit', params: {num: no}}">
+            <button @click="post.closePost()">
+              <span>수정</span>
+            </button>
+          </router-link>
+          <button @click="edit.deletePost(no)"><span>삭제</span></button>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
-<script>
+<script setup>
 import {mainStore} from "@/store/contents";
 import {postStore} from "@/store/popup";
-export default {
-  name: "PostPopup",
-  setup() {
-    const items = mainStore();
-    const post = postStore();
-    return {
-      items,
-      post,
-    };
-  },
-  data() {
-    return {
-      data: {},
-      comment: [],
-    };
-  },
-  created() {
-    this.items.getPosts[0].map((item) => {
-      if (item.no == this.post.getPostId) {
-        this.data = item;
-      }
-    });
-    this.items.getComments[0].map((item) => {
-      if (item.no == this.post.getPostId) {
-        this.comment.push(item);
-      }
-    });
-  },
-};
+import {authStore} from "@/store/user";
+import {editStore} from "@/store/contents";
+
+import {storeToRefs} from "pinia";
+
+const items = mainStore();
+const post = postStore();
+const auth = authStore();
+const edit = editStore();
+
+const {contents, comments} = storeToRefs(items);
+const {id} = storeToRefs(post);
+const {user} = storeToRefs(auth);
+
+let data = {};
+let comment = [];
+let btns = false;
+let no = 0;
+
+// 컨텐츠
+contents.value[0].map((item) => {
+  if (item.no == id.value) {
+    data = item;
+    no = item.no;
+    if (user.value.userNum == item.userNum) {
+      btns = true;
+    }
+  }
+});
+comments.value[0].map((item) => {
+  if (item.no == id.value) {
+    comment.push(item);
+  }
+});
 </script>
 
 <style lang="scss" scoped>
@@ -263,6 +278,21 @@ export default {
           }
           &:hover {
             background-color: #eee;
+          }
+        }
+      }
+    }
+    .bottom {
+      text-align: end;
+      .btns {
+        margin: 0 10px 10px 0;
+        button {
+          background-color: #333;
+          color: #fff;
+          border-radius: 5px;
+          padding: 5px 7px;
+          &:last-child {
+            margin-left: 5px;
           }
         }
       }

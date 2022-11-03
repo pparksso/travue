@@ -76,3 +76,95 @@ export const newStore = defineStore("new", {
     },
   },
 });
+
+export const myTourStore = defineStore("mytour", {
+  state: () => ({
+    myContents: [],
+    myComments: [],
+    myMinPage: 0,
+    myPage: 0,
+    myStartPage: 0,
+    myTotalPage: 0,
+    myLastPage: 0,
+    myPageNum: 1,
+  }),
+  actions: {
+    async getMyContents(num) {
+      try {
+        this.myContents = [];
+        await userApi.getMyPosts(num).then((res) => {
+          const items = res.data;
+          this.myContents.push(items.contents);
+          this.myComments.push(items.comments);
+          this.myMinPage = items.minPage;
+          this.myPage = items.page;
+          this.myStartPage = items.startPage;
+          this.myTotalPage = items.totalPage;
+          this.myLastPage = items.lastPage;
+        });
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    getMyPageNum(num) {
+      this.myPageNum = num;
+    },
+  },
+});
+
+export const editStore = defineStore("edit", {
+  state: () => ({
+    editContents: {},
+    src: "",
+    cloudinaryFileName: "",
+  }),
+  actions: {
+    goEditPage(num) {
+      contentsApi
+        .editPetch(num)
+        .then((res) => {
+          this.editContents = res.data.result;
+          this.src = res.data.result.imgUrl;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    sendImgFetch(sendImgData) {
+      contentsApi
+        .sendImg(sendImgData)
+        .then((res) => {
+          this.src = res.data.cloudinaryImgSrc;
+          this.cloudinaryFileName = res.data.cloudinaryFileName;
+        })
+        .catch((err) => console.log(err));
+    },
+    sendUpdateFetch({title, date, location, desc, imgUrl, fileName, no}) {
+      contentsApi
+        .updatePost({title, date, location, desc, imgUrl, fileName, no})
+        .then((res) => {
+          if (res.data.update) {
+            this.src = "";
+            window.location.href = "/";
+          } else {
+            alert("다시 입력해주세요");
+          }
+        })
+        .catch((err) => console.log(err));
+    },
+    deletePost(no) {
+      if (window.confirm("삭제 하시겠습니까?")) {
+        contentsApi
+          .deletePost(no)
+          .then((res) => {
+            if (res.data.delete) {
+              window.location.href = "/";
+            }
+          })
+          .catch((err) => console.log(err));
+      } else {
+        return false;
+      }
+    },
+  },
+});

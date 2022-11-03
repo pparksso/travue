@@ -2,13 +2,13 @@
   <div class="main">
     <div class="container">
       <ul>
-        <Post />
+        <Post :contents="myContents" />
       </ul>
       <Pagination
-        :start="startPage"
-        :total="totalPage"
-        :end="minPage"
-        :currentPage="page"
+        :start="myStartPage"
+        :total="myTotalPage"
+        :end="myMinPage"
+        :currentPage="myPage"
       />
     </div>
   </div>
@@ -17,18 +17,19 @@
 <script setup>
 import Post from "@/components/contents/Post.vue";
 import Pagination from "@/components/common/Pagination.vue";
-import {mainStore} from "@/store/contents";
+import {myTourStore} from "@/store/contents";
 import {storeToRefs} from "pinia";
 import {watch} from "@vue/runtime-core";
-const main = mainStore();
+const myTour = myTourStore();
 
 // 포스트 갖고오기
-main.getContents();
-const {startPage, totalPage, minPage, page, pageNum} = storeToRefs(main);
+myTour.getMyContents();
+const {myStartPage, myTotalPage, myMinPage, myPage, myPageNum, myContents} =
+  storeToRefs(myTour);
 
 // 페이지가 바뀌면 다시 포스트 호출
-watch(pageNum, () => {
-  main.getContents(pageNum.value);
+watch(myPageNum, () => {
+  myTour.getMyContents(myPageNum.value);
 });
 </script>
 
