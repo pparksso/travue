@@ -3,6 +3,7 @@ import MainView from "../views/MainView.vue";
 import New from "../components/page/New";
 import MyTourView from "../views/MyTourView.vue";
 import Edit from "../components/page/Edit.vue";
+import MyPage from "../components/page/MyPage.vue";
 
 import {storeToRefs} from "pinia";
 import {authStore} from "@/store/user";
@@ -49,6 +50,7 @@ const routes = [
       }
     },
   },
+  {path: "/mypage", name: "mypage", component: MyPage},
 ];
 
 const router = createRouter({

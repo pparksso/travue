@@ -116,7 +116,7 @@ router.get("/mytour", async (req, res) => {
   try {
     if (req.user) {
       let page = parseInt(req.query.page);
-      let size = 5;
+      let size = 6;
       const pageGroupSize = 5;
       if (!page) {
         page = 1;
@@ -158,7 +158,7 @@ router.post("/mypageupdate", (req, res) => {
     userDb.updateOne({ id: id }, { $set: { id: id, pw: hash, nickname: nickname } }, (err, result) => {
       res.json({ infoChange: true });
       if (err) {
-        res.redirect("500");
+        console.log(err);
       }
     });
   });

@@ -18,6 +18,7 @@ export const mainStore = defineStore("main", {
     async getContents(num) {
       try {
         this.contents = [];
+        this.comments = [];
         await userApi.getPosts(num).then((res) => {
           const items = res.data;
           this.contents.push(items.contents);
@@ -92,6 +93,7 @@ export const myTourStore = defineStore("mytour", {
     async getMyContents(num) {
       try {
         this.myContents = [];
+        this.myComments = [];
         await userApi.getMyPosts(num).then((res) => {
           const items = res.data;
           this.myContents.push(items.contents);
@@ -121,7 +123,7 @@ export const editStore = defineStore("edit", {
   actions: {
     goEditPage(num) {
       contentsApi
-        .editPetch(num)
+        .editFetch(num)
         .then((res) => {
           this.editContents = res.data.result;
           this.src = res.data.result.imgUrl;
@@ -165,6 +167,18 @@ export const editStore = defineStore("edit", {
       } else {
         return false;
       }
+    },
+  },
+});
+
+export const heartStore = defineStore("heart", {
+  state: () => ({}),
+  actions: {
+    heartPlusAct(no) {
+      contentsApi
+        .heartAddFetch(no)
+        .then((res) => console.log(res.data))
+        .catch((err) => console.log(err));
     },
   },
 });

@@ -28,7 +28,7 @@ function sendCreate({title, date, location, desc, imgUrl, fileName}) {
 /**
  * 수정페이지로 이동
  */
-function editPetch(num) {
+function editFetch(num) {
   return req.get(`/update/?edit=${num}`);
 }
 
@@ -52,6 +52,19 @@ function updatePost({title, date, location, desc, imgUrl, fileName, no}) {
 function deletePost(no) {
   return req.post("/update/delete", {no: no});
 }
-const contentsApi = {sendImg, sendCreate, editPetch, updatePost, deletePost};
+/**
+ * 하트 더하기
+ */
+function heartAddFetch(no) {
+  return req.post("/heart/plus", no);
+}
+const contentsApi = {
+  sendImg,
+  sendCreate,
+  editFetch,
+  updatePost,
+  deletePost,
+  heartAddFetch,
+};
 
 export default contentsApi;

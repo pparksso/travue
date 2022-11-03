@@ -20,27 +20,17 @@
               <span class="date">{{ data.date }}</span>
               <span class="nickname">{{ data.nickname }}</span>
             </div>
-            <!-- <div class="heart">
-              <span id="userHeartNum" class="heartNum" data-no="{{item.no}}">{{
-                item.heartNum
+            <div class="heart">
+              <span id="userHeartNum" class="heartNum">{{
+                data.heartNum
               }}</span>
-              <button id="popupEmptyHeart" class="on" data-no="{{item.no}}">
-                <span class="material-icons-outlined"> favorite_border </span>
-              </button>
-              <button id="popupFullHeart" class="" data-no="{{item.no}}">
+              <button id="popupFullHeart" v-if="isHeart">
                 <span class="material-icons"> favorite </span>
               </button>
-            </div> -->
-            <!-- <div class="heart">
-              <span
-                id="noUserHeartNum"
-                class="heartNum"
-                data-no="{{item.no}}"
-                >{{ item.heartNum }}</span
-              ><button id="noUserHeart" data-no="{{item.no}}">
+              <button id="popupEmptyHeart" v-else>
                 <span class="material-icons-outlined"> favorite_border </span>
               </button>
-            </div> -->
+            </div>
           </div>
           <div class="txtBox">
             <p>{{ data.desc }}</p>
@@ -54,9 +44,8 @@
                 name=""
                 maxlength="50"
                 class="commentInput"
-                data-no="{{item.no}}"
             /></label>
-            <button class="commentAddBtn" data-no="{{item.no}}">
+            <button class="commentAddBtn" >
               <span>등록</span>
             </button>
           </div> -->
@@ -66,9 +55,9 @@
                 <span class="userNickname"> {{ com.nickname }} </span>
                 <p>{{ com.comment }}</p>
               </div>
-              <!-- <button class="commentDelBtn">
+              <button class="commentDelBtn" v-if="com.id == user.id">
                 <span class="material-icons"> close </span>
-              </button> -->
+              </button>
             </div>
           </div>
         </div>
@@ -88,28 +77,33 @@
 </template>
 
 <script setup>
-import {mainStore} from "@/store/contents";
 import {postStore} from "@/store/popup";
 import {authStore} from "@/store/user";
-import {editStore} from "@/store/contents";
+import {mainStore, editStore} from "@/store/contents";
+// import {getCurrentInstance} from "vue";
 
 import {storeToRefs} from "pinia";
 
-const items = mainStore();
+// const insternalInstance = getCurrentInstance();
+// const emitter = insternalInstance.appContext.config.globalProperties.emitter;
 const post = postStore();
 const auth = authStore();
 const edit = editStore();
-
-const {contents, comments} = storeToRefs(items);
+const main = mainStore();
+// const myTour = myTourStore();
 const {id} = storeToRefs(post);
 const {user} = storeToRefs(auth);
+const {contents, comments} = storeToRefs(main);
+// const {myContents, myComments} = storeToRefs(myTour);
 
 let data = {};
 let comment = [];
 let btns = false;
 let no = 0;
+let isHeart = false;
 
-// 컨텐츠
+// 메인 컨텐츠
+
 contents.value[0].map((item) => {
   if (item.no == id.value) {
     data = item;
@@ -120,8 +114,34 @@ contents.value[0].map((item) => {
   }
 });
 comments.value[0].map((item) => {
-  if (item.no == id.value) {
+  if (item.contentsNo == no) {
     comment.push(item);
+  }
+});
+
+// 마이투어 컨텐츠
+// function myTourPopup() {
+//   myContents.value[0].map((item) => {
+//     if (item.no == id.value) {
+//       data = item;
+//       no = item.no;
+//       if (user.value.userNum == item.userNum) {
+//         btns = true;
+//       }
+//     }
+//   });
+//   myComments.value[0].map((item) => {
+//     if (item.no == id.value) {
+//       comment.push(item);
+//     }
+//   });
+// }
+// mainPopup();
+user.value.heart.map((item) => {
+  if (item == no) {
+    isHeart = true;
+  } else {
+    isHeart = false;
   }
 });
 </script>
@@ -207,7 +227,6 @@ comments.value[0].map((item) => {
             font-size: 12px;
           }
           button {
-            display: none;
             background: none;
             &#noUserHeart {
               display: block;
@@ -216,9 +235,6 @@ comments.value[0].map((item) => {
             .material-icons {
               font-size: 18px;
               color: rgb(228, 9, 9);
-            }
-            &.on {
-              display: block;
             }
           }
         }

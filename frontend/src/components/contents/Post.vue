@@ -5,7 +5,7 @@
     :key="item.title"
     @click="post.clickPost(item.no)"
   >
-    <div class="contentsBox">
+    <div class="contentsBox" :num="(no = item.no)">
       <div class="img">
         <img :src="item.imgUrl" :alt="item.title" />
       </div>
@@ -19,25 +19,39 @@
         <p>{{ item.desc }}</p>
       </div>
     </div>
-    <!-- <div class="heart">
-      <button id="emptyHeart" class="on" data-no="{{item.no}}">
-        <span class="material-icons-outlined"> favorite_border </span>
-      </button>
-      <button id="fullHeart" class="" data-no="{{item.no}}">
+    <div class="heart" v-for="i in user.heart" :key="i">
+      <button id="fullHeart" v-if="i == item.no">
         <span class="material-icons"> favorite </span>
       </button>
-    </div> -->
+      <button id="emptyHeart" v-else @click="emptyHeartClick()">
+        <span class="material-icons-outlined"> favorite_border </span>
+      </button>
+    </div>
   </li>
 </template>
 
 <script setup>
-import {defineProps} from "vue";
+import {defineProps, ref} from "vue";
 import {postStore} from "@/store/popup";
+import {authStore} from "@/store/user";
+import {heartStore} from "@/store/contents";
+import {storeToRefs} from "pinia";
+const auth = authStore();
 const post = postStore();
-
+const heart = heartStore();
+const {user} = storeToRefs(auth);
+let num = ref();
 defineProps({
   contents: Array,
 });
+console.log(num);
+function emptyHeartClick() {
+  heart.heartPlusAct();
+}
+
+// user.value.heart.map(item=> {
+//   if(item == )
+// })
 </script>
 
 <style lang="scss" scoped>
@@ -99,6 +113,25 @@ li {
         line-height: 1.2;
         -webkit-box-orient: vertical;
         -webkit-line-clamp: 2;
+      }
+    }
+  }
+  .heart {
+    position: absolute;
+    right: 5%;
+    bottom: 28%;
+    z-index: 1;
+    button {
+      position: absolute;
+      top: 10px;
+      right: 0;
+      z-index: 1;
+      padding: 0;
+      background: none;
+      .material-icons-outlined,
+      .material-icons {
+        font-size: 18px;
+        color: rgb(228, 9, 9);
       }
     }
   }

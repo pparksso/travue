@@ -28,7 +28,7 @@ router.post("/plus", async (req, res) => {
     const result = await contentsDb.findOne({ no: no });
     res.json({ heartNum: result.heartNum });
   } catch (err) {
-    res.redirect("500");
+    console.log(err);
   }
 });
 

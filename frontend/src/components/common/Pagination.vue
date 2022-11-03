@@ -26,8 +26,9 @@
 <script setup>
 import calcPage from "@/utils/pagination";
 import {defineProps} from "vue";
-import {mainStore} from "@/store/contents";
+import {mainStore, myTourStore} from "@/store/contents";
 const main = mainStore();
+const myTour = myTourStore();
 
 defineProps({
   start: Number,
@@ -37,6 +38,7 @@ defineProps({
 });
 function sendNum(num) {
   main.getPageNum(num);
+  myTour.getMyPageNum(num);
 }
 </script>
 

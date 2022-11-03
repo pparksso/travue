@@ -15,11 +15,14 @@
 </template>
 
 <script setup>
+// import {getCurrentInstance} from "vue";
 import Post from "@/components/contents/Post.vue";
 import Pagination from "@/components/common/Pagination.vue";
 import {myTourStore} from "@/store/contents";
 import {storeToRefs} from "pinia";
 import {watch} from "@vue/runtime-core";
+// const insternalInstance = getCurrentInstance();
+// const emitter = insternalInstance.appContext.config.globalProperties.emitter;
 const myTour = myTourStore();
 
 // 포스트 갖고오기
@@ -30,7 +33,12 @@ const {myStartPage, myTotalPage, myMinPage, myPage, myPageNum, myContents} =
 // 페이지가 바뀌면 다시 포스트 호출
 watch(myPageNum, () => {
   myTour.getMyContents(myPageNum.value);
+  console.log(myPageNum.value, myContents.value);
 });
+
+// function openPopup() {
+//   emitter.emit("myTourPopup");
+// }
 </script>
 
 <style lang="scss" scoped>

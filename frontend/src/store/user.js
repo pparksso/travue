@@ -137,3 +137,24 @@ export const authStore = defineStore("auth", {
     },
   },
 });
+
+export const myPageStore = defineStore("myPage", {
+  state: () => ({}),
+  actions: {
+    modifyInfoAct({id, pw, nickname}) {
+      userApi
+        .modifyInfoFetch({id, pw, nickname})
+        .then((res) => {
+          if (res.data.infoChange) {
+            alert("정보가 수정되었습니다.");
+            window.location.href = "/";
+          } else {
+            console.log("실패");
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+  },
+});

@@ -63,6 +63,13 @@ function logoutFetch() {
 function authFetch() {
   return req.get("/user/auth");
 }
+
+/**
+ * 내정보 수정
+ */
+function modifyInfoFetch({id, pw, nickname}) {
+  return req.post("/user/mypageupdate", {id, pw, nickname});
+}
 const userApi = {
   getPosts,
   idCheck,
@@ -72,5 +79,6 @@ const userApi = {
   logoutFetch,
   authFetch,
   getMyPosts,
+  modifyInfoFetch,
 };
 export default userApi;

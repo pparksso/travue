@@ -7,8 +7,10 @@
       <router-link to="/mytour"
         ><li><button>My tour</button></li></router-link
       >
+      <router-link to="/mypage"
+        ><li><button>My page</button></li></router-link
+      >
 
-      <li><button>My page</button></li>
       <li><button @click="clickedLogout">Logout</button></li>
     </ul>
     <ul v-else>
