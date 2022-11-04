@@ -15,7 +15,7 @@ router.get("/arr", (req, res) => {
 
 router.post("/plus", async (req, res) => {
   try {
-    const no = parseInt(req.body.no);
+    const no = Number(req.body.no);
     await userDb.updateOne(
       { userNum: req.user.userNum },
       {
@@ -26,7 +26,7 @@ router.post("/plus", async (req, res) => {
     );
     const plus = await contentsDb.updateOne({ no: no }, { $inc: { heartNum: 1 } });
     const result = await contentsDb.findOne({ no: no });
-    res.json({ heartNum: result.heartNum });
+    res.json({ add: true });
   } catch (err) {
     console.log(err);
   }
@@ -34,7 +34,7 @@ router.post("/plus", async (req, res) => {
 
 router.post("/minus", async (req, res) => {
   try {
-    const no = parseInt(req.body.no);
+    const no = Number(req.body.no);
     await userDb.updateOne(
       { userNum: req.user.userNum },
       {
@@ -45,9 +45,9 @@ router.post("/minus", async (req, res) => {
     );
     const minus = await contentsDb.updateOne({ no: no }, { $inc: { heartNum: -1 } });
     const result = await contentsDb.findOne({ no: no });
-    res.json({ heartNum: result.heartNum });
+    res.json({ del: true });
   } catch (err) {
-    res.redirect("500");
+    console.log(err);
   }
 });
 

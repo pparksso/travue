@@ -76,7 +76,9 @@ function delCommentFetch(no) {
 function heartAddFetch(no) {
   return req.post("/heart/plus", no);
 }
-
+function delHeartFetch(no) {
+  return req.post("/heart/minus", no);
+}
 const contentsApi = {
   sendImg,
   sendCreate,
@@ -87,6 +89,7 @@ const contentsApi = {
   popupFetch,
   AddCommentFetch,
   delCommentFetch,
+  delHeartFetch,
 };
 
 export default contentsApi;

@@ -170,15 +170,3 @@ export const editStore = defineStore("edit", {
     },
   },
 });
-
-export const heartStore = defineStore("heart", {
-  state: () => ({}),
-  actions: {
-    heartPlusAct(no) {
-      contentsApi
-        .heartAddFetch(no)
-        .then((res) => console.log(res.data))
-        .catch((err) => console.log(err));
-    },
-  },
-});

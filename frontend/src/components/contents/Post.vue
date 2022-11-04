@@ -1,11 +1,6 @@
 <template>
-  <li
-    class="post"
-    v-for="item in contents[0]"
-    :key="item.title"
-    @click="post.clickPost(item.no)"
-  >
-    <div class="contentsBox">
+  <li class="post" v-for="item in contents[0]" :key="item.title">
+    <div class="contentsBox" @click="post.clickPost(item.no)">
       <div class="img">
         <img :src="item.imgUrl" :alt="item.title" />
       </div>
@@ -18,9 +13,9 @@
         </div>
         <p>{{ item.desc }}</p>
       </div>
-      <div class="heart">
-        <Heart :no="item.no" />
-      </div>
+    </div>
+    <div class="heart">
+      <Heart :no="item.no" />
     </div>
   </li>
 </template>
