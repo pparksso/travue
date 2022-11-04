@@ -26,10 +26,10 @@
               <span id="userHeartNum" class="heartNum">{{
                 contents.heartNum
               }}</span>
-              <button id="popupFullHeart" v-if="isHeart">
+              <button id="popupFullHeart" v-if="isHeart" @click="delHeart()">
                 <span class="material-icons"> favorite </span>
               </button>
-              <button id="popupEmptyHeart" v-else>
+              <button id="popupEmptyHeart" v-else @click="addHeart()">
                 <span class="material-icons-outlined"> favorite_border </span>
               </button>
             </div>
@@ -102,6 +102,7 @@
 
 <script setup>
 import {ref, watch} from "vue";
+import contentsApi from "@/api/contents";
 import {postStore} from "@/store/popup";
 import {loginFormStore, authStore} from "@/store/user";
 import {storeToRefs} from "pinia";
@@ -116,6 +117,7 @@ let isHeart = ref(false);
 let btns = ref(false);
 
 if (isAuth.value) {
+  // 로그인한 회원이면 클릭한 하트 표시하기
   let heartArr = [...user.value.heart];
   watch(contents, (newContents) => {
     heartArr.forEach((i) => {
@@ -131,8 +133,51 @@ if (isAuth.value) {
       btns.value = false;
     }
   });
+
+  // 팝업 안이 아닌 밖에서 하트를 클릭했을 때, 유저 정보를 다시 받아(밖에서) 유저정보가 바뀌면 다시 유저정보를 읽으면서 하트상태를 변화시키는 함수
+  watch(user, (newUser) => {
+    let heartArr = [newUser.heart];
+    heartArr.forEach((i) => {
+      if (i == contents.value.no) return (isHeart.value = true);
+      else return false;
+    });
+  });
 } else {
   isHeart.value = false;
+}
+
+// 하트 클릭하기
+function addHeart() {
+  if (isAuth.value) {
+    contentsApi
+      .heartAddFetch({no: contents.value.no})
+      .then((res) => {
+        if (res.data.add) {
+          isHeart.value = true;
+          auth.AuthFetch();
+        }
+      })
+      .catch((err) => console.log(err));
+  } else {
+    alert("로그인 후 이용가능합니다.");
+  }
+}
+
+// 하트 지우기
+function delHeart() {
+  if (isAuth.value) {
+    contentsApi
+      .delHeartFetch({no: contents.value.no})
+      .then((res) => {
+        if (res.data.del) {
+          isHeart.value = false;
+          auth.AuthFetch();
+        }
+      })
+      .catch((err) => console.log(err));
+  } else {
+    alert("로그인 후 이용가능합니다.");
+  }
 }
 </script>
 
