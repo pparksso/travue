@@ -1,6 +1,12 @@
 import req from "./axiosInstance";
 
 /**
+ * 포스트 팝업창 데이터 받기
+ */
+function popupFetch(no) {
+  return req.get(`/index/popup/?no=${no}`);
+}
+/**
  * 이미지 바로 띄우기(사진 보내고, url 받음)
  */
 function sendImg(sendImgData) {
@@ -58,6 +64,7 @@ function deletePost(no) {
 function heartAddFetch(no) {
   return req.post("/heart/plus", no);
 }
+
 const contentsApi = {
   sendImg,
   sendCreate,
@@ -65,6 +72,7 @@ const contentsApi = {
   updatePost,
   deletePost,
   heartAddFetch,
+  popupFetch,
 };
 
 export default contentsApi;

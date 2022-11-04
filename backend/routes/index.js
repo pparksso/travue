@@ -9,7 +9,6 @@ const { loginCheck } = require("../routes/middleware");
 
 router.get("/index", loginCheck, async (req, res, next) => {
   try {
-    ``;
     // 페이지네이션
     let page = parseInt(req.query.page);
     const size = 6;
@@ -33,7 +32,16 @@ router.get("/index", loginCheck, async (req, res, next) => {
     res.redirect("500");
   }
 });
-
+router.get("/index/popup", async (req, res) => {
+  try {
+    let no = Number(req.query.no);
+    const contents = await contentsDb.findOne({ no });
+    const comments = await commentsDb.find({ contentsNo: no });
+    res.json({ contents, comments });
+  } catch (err) {
+    console.log(err);
+  }
+});
 router.get("/500", (req, res) => {
   res.status(500).render("500");
 });

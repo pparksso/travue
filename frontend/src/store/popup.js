@@ -1,4 +1,5 @@
 import {defineStore} from "pinia";
+import contentsApi from "@/api/contents";
 
 export const loginStore = defineStore("login", {
   state: () => ({
@@ -41,11 +42,20 @@ export const signUpStore = defineStore("signUp", {
 export const postStore = defineStore("post", {
   state: () => ({
     now: false,
-    id: 0,
+    contents: [],
+    comments: [],
   }),
   actions: {
-    clickPost(id) {
-      this.id = id;
+    clickPost(no) {
+      contentsApi
+        .popupFetch(no)
+        .then((res) => {
+          this.contents = res.data.contents;
+          this.comments = res.data.comments;
+        })
+        .catch((err) => console.log(err));
+      this.contents = [];
+      this.comments = [];
       this.now = true;
     },
     closePost() {

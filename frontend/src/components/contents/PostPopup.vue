@@ -6,23 +6,25 @@
           <h1></h1>
         </div>
         <button class="popupCloseBtn">
-          <span class="material-icons" @click="post.closePost()"> close </span>
+          <span class="material-icons" @click="popupStore.closePost()">
+            close
+          </span>
         </button>
       </div>
       <div class="popupBody">
         <div class="center">
           <div class="imgBox">
-            <img :src="data.imgUrl" :alt="data.title" />
+            <img :src="contents.imgUrl" :alt="contents.title" />
           </div>
           <div class="infoBox">
             <div class="info">
-              <span class="location">{{ data.location }}</span>
-              <span class="date">{{ data.date }}</span>
-              <span class="nickname">{{ data.nickname }}</span>
+              <span class="location">{{ contents.location }}</span>
+              <span class="date">{{ contents.date }}</span>
+              <span class="nickname">{{ contents.nickname }}</span>
             </div>
-            <div class="heart">
+            <!-- <div class="heart">
               <span id="userHeartNum" class="heartNum">{{
-                data.heartNum
+                contents.heartNum
               }}</span>
               <button id="popupFullHeart" v-if="isHeart">
                 <span class="material-icons"> favorite </span>
@@ -30,27 +32,29 @@
               <button id="popupEmptyHeart" v-else>
                 <span class="material-icons-outlined"> favorite_border </span>
               </button>
-            </div>
+            </div> -->
           </div>
           <div class="txtBox">
-            <p>{{ data.desc }}</p>
+            <p>{{ contents.desc }}</p>
           </div>
         </div>
         <div class="commentWrap">
-          <!-- <div class="inputBox">
+          <div class="inputBox" v-if="isAuth || loginStatus">
             <label
               ><input
                 type="text"
                 name=""
                 maxlength="50"
                 class="commentInput"
+                @input="newComment = $event.target.value"
+                :value="newComment"
             /></label>
-            <button class="commentAddBtn" >
+            <button class="commentAddBtn">
               <span>등록</span>
             </button>
-          </div> -->
+          </div>
           <div class="commentBox">
-            <div class="comment" v-for="com in comment" :key="com">
+            <div class="comment" v-for="com in comments" :key="com">
               <div class="commentLeft">
                 <span class="userNickname"> {{ com.nickname }} </span>
                 <p>{{ com.comment }}</p>
@@ -62,7 +66,7 @@
           </div>
         </div>
       </div>
-      <div class="bottom" v-if="btns">
+      <!-- <div class="bottom" v-if="btns">
         <div class="btns">
           <router-link :to="{name: 'edit', params: {num: no}}">
             <button @click="post.closePost()">
@@ -71,79 +75,23 @@
           </router-link>
           <button @click="edit.deletePost(no)"><span>삭제</span></button>
         </div>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
 
 <script setup>
+import {ref} from "vue";
 import {postStore} from "@/store/popup";
-import {authStore} from "@/store/user";
-import {mainStore, editStore} from "@/store/contents";
-// import {getCurrentInstance} from "vue";
-
+import {loginFormStore, authStore} from "@/store/user";
 import {storeToRefs} from "pinia";
-
-// const insternalInstance = getCurrentInstance();
-// const emitter = insternalInstance.appContext.config.globalProperties.emitter;
-const post = postStore();
+const popupStore = postStore();
 const auth = authStore();
-const edit = editStore();
-const main = mainStore();
-// const myTour = myTourStore();
-const {id} = storeToRefs(post);
-const {user} = storeToRefs(auth);
-const {contents, comments} = storeToRefs(main);
-// const {myContents, myComments} = storeToRefs(myTour);
-
-let data = {};
-let comment = [];
-let btns = false;
-let no = 0;
-let isHeart = false;
-
-// 메인 컨텐츠
-
-contents.value[0].map((item) => {
-  if (item.no == id.value) {
-    data = item;
-    no = item.no;
-    if (user.value.userNum == item.userNum) {
-      btns = true;
-    }
-  }
-});
-comments.value[0].map((item) => {
-  if (item.contentsNo == no) {
-    comment.push(item);
-  }
-});
-
-// 마이투어 컨텐츠
-// function myTourPopup() {
-//   myContents.value[0].map((item) => {
-//     if (item.no == id.value) {
-//       data = item;
-//       no = item.no;
-//       if (user.value.userNum == item.userNum) {
-//         btns = true;
-//       }
-//     }
-//   });
-//   myComments.value[0].map((item) => {
-//     if (item.no == id.value) {
-//       comment.push(item);
-//     }
-//   });
-// }
-// mainPopup();
-user.value.heart.map((item) => {
-  if (item == no) {
-    isHeart = true;
-  } else {
-    isHeart = false;
-  }
-});
+const login = loginFormStore();
+const {loginStatus} = storeToRefs(login);
+const {user, isAuth} = storeToRefs(auth);
+const {contents, comments} = storeToRefs(popupStore);
+let newComment = ref("");
 </script>
 
 <style lang="scss" scoped>

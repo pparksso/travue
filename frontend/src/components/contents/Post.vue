@@ -5,7 +5,7 @@
     :key="item.title"
     @click="post.clickPost(item.no)"
   >
-    <div class="contentsBox" :num="(no = item.no)">
+    <div class="contentsBox">
       <div class="img">
         <img :src="item.imgUrl" :alt="item.title" />
       </div>
@@ -31,7 +31,7 @@
 </template>
 
 <script setup>
-import {defineProps, ref} from "vue";
+import {defineProps} from "vue";
 import {postStore} from "@/store/popup";
 import {authStore} from "@/store/user";
 import {heartStore} from "@/store/contents";
@@ -40,11 +40,11 @@ const auth = authStore();
 const post = postStore();
 const heart = heartStore();
 const {user} = storeToRefs(auth);
-let num = ref();
+
 defineProps({
   contents: Array,
 });
-console.log(num);
+
 function emptyHeartClick() {
   heart.heartPlusAct();
 }
