@@ -20,7 +20,7 @@ router.post("/add", async (req, res) => {
       nickname: nickname,
       id: id,
     });
-    res.json({ comment: comment, contentsNo: contentsNo, nickname: nickname, id: id, no: no });
+    res.json(commentInsert);
   } catch (err) {
     res.redirect("500");
   }

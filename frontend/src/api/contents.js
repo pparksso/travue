@@ -59,6 +59,12 @@ function deletePost(no) {
   return req.post("/update/delete", {no: no});
 }
 /**
+ * 댓글 추가
+ */
+function AddCommentFetch({comment, contentsNo}) {
+  return req.post("/comment/add", {comment, contentsNo});
+}
+/**
  * 하트 더하기
  */
 function heartAddFetch(no) {
@@ -73,6 +79,7 @@ const contentsApi = {
   deletePost,
   heartAddFetch,
   popupFetch,
+  AddCommentFetch,
 };
 
 export default contentsApi;

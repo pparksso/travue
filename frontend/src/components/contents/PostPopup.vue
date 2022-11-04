@@ -48,8 +48,24 @@
                 class="commentInput"
                 @input="newComment = $event.target.value"
                 :value="newComment"
+                @keydown.enter="
+                  popupStore.addCommentAct({
+                    comment: newComment,
+                    contentsNo: contents.no,
+                  });
+                  newComment = '';
+                "
             /></label>
-            <button class="commentAddBtn">
+            <button
+              class="commentAddBtn"
+              @click="
+                popupStore.addCommentAct({
+                  comment: newComment,
+                  contentsNo: contents.no,
+                });
+                newComment = '';
+              "
+            >
               <span>등록</span>
             </button>
           </div>
@@ -206,6 +222,7 @@ let newComment = ref("");
             width: 100%;
             padding: 5px;
             outline: none;
+            border: none;
             border-bottom: 1px solid #aaa;
           }
         }

@@ -44,6 +44,7 @@ export const postStore = defineStore("post", {
     now: false,
     contents: [],
     comments: [],
+    saveComment: [],
   }),
   actions: {
     clickPost(no) {
@@ -60,6 +61,15 @@ export const postStore = defineStore("post", {
     },
     closePost() {
       this.now = false;
+      this.saveComment = [];
+    },
+    addCommentAct({comment, contentsNo}) {
+      contentsApi
+        .AddCommentFetch({comment, contentsNo})
+        .then((res) => {
+          this.comments.push(res.data);
+        })
+        .catch((err) => console.log(err));
     },
   },
   getters: {
