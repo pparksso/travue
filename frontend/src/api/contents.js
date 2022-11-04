@@ -65,6 +65,12 @@ function AddCommentFetch({comment, contentsNo}) {
   return req.post("/comment/add", {comment, contentsNo});
 }
 /**
+ * 댓글 삭제
+ */
+function delCommentFetch(no) {
+  return req.post("/comment/delete", {no: no});
+}
+/**
  * 하트 더하기
  */
 function heartAddFetch(no) {
@@ -80,6 +86,7 @@ const contentsApi = {
   heartAddFetch,
   popupFetch,
   AddCommentFetch,
+  delCommentFetch,
 };
 
 export default contentsApi;

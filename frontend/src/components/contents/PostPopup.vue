@@ -75,7 +75,11 @@
                 <span class="userNickname"> {{ com.nickname }} </span>
                 <p>{{ com.comment }}</p>
               </div>
-              <button class="commentDelBtn" v-if="com.id == user.id">
+              <button
+                class="commentDelBtn"
+                v-if="com.id == user.id"
+                @click="popupStore.delCommentAct(com.no)"
+              >
                 <span class="material-icons"> close </span>
               </button>
             </div>
