@@ -22,7 +22,7 @@
               <span class="date">{{ contents.date }}</span>
               <span class="nickname">{{ contents.nickname }}</span>
             </div>
-            <!-- <div class="heart">
+            <div class="heart">
               <span id="userHeartNum" class="heartNum">{{
                 contents.heartNum
               }}</span>
@@ -32,7 +32,7 @@
               <button id="popupEmptyHeart" v-else>
                 <span class="material-icons-outlined"> favorite_border </span>
               </button>
-            </div> -->
+            </div>
           </div>
           <div class="txtBox">
             <p>{{ contents.desc }}</p>
@@ -86,22 +86,22 @@
           </div>
         </div>
       </div>
-      <!-- <div class="bottom" v-if="btns">
+      <div class="bottom" v-if="btns">
         <div class="btns">
-          <router-link :to="{name: 'edit', params: {num: no}}">
-            <button @click="post.closePost()">
+          <router-link :to="{name: 'edit', params: {num: contents.no}}">
+            <button @click="popupStore.closePost()">
               <span>수정</span>
             </button>
           </router-link>
           <button @click="edit.deletePost(no)"><span>삭제</span></button>
         </div>
-      </div> -->
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import {ref} from "vue";
+import {ref, watch} from "vue";
 import {postStore} from "@/store/popup";
 import {loginFormStore, authStore} from "@/store/user";
 import {storeToRefs} from "pinia";
@@ -112,6 +112,28 @@ const {loginStatus} = storeToRefs(login);
 const {user, isAuth} = storeToRefs(auth);
 const {contents, comments} = storeToRefs(popupStore);
 let newComment = ref("");
+let isHeart = ref(false);
+let btns = ref(false);
+
+if (isAuth.value) {
+  let heartArr = [...user.value.heart];
+  watch(contents, (newContents) => {
+    heartArr.forEach((i) => {
+      if (i == newContents.no) {
+        isHeart.value = true;
+      } else {
+        return false;
+      }
+    });
+    if (contents.value.userNum == user.value.userNum) {
+      btns.value = true;
+    } else {
+      btns.value = false;
+    }
+  });
+} else {
+  isHeart.value = false;
+}
 </script>
 
 <style lang="scss" scoped>

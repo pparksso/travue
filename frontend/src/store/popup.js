@@ -74,11 +74,10 @@ export const postStore = defineStore("post", {
         .delCommentFetch(no)
         .then((res) => {
           if (res.data.del) {
-            this.comments.forEach((i) => {
-              if (i.no == no) {
-                this.comments.splice(i, 1);
-              }
+            const newArr = this.comments.filter((i) => {
+              return i.no !== no;
             });
+            this.comments = [...newArr];
           }
         })
         .catch((err) => console.log(err));

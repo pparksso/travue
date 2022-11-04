@@ -88,6 +88,7 @@ export const loginFormStore = defineStore("loginForm", {
             this.loginInfo = res.data.info;
             this.loginStatus = false;
           } else {
+            window.location.reload();
             this.loginStatus = true;
             this.loginMessage = res.data.message;
           }

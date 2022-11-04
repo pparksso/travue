@@ -34,7 +34,7 @@
 
 <script setup>
 import {loginStore} from "@/store/popup";
-import {loginFormStore} from "@/store/user";
+import {loginFormStore, authStore} from "@/store/user";
 import {ref} from "@vue/reactivity";
 import {onMounted, watch} from "@vue/runtime-core";
 import {storeToRefs} from "pinia";
@@ -45,6 +45,7 @@ let idRef = ref();
 
 const login = loginStore();
 const loginForm = loginFormStore();
+const auth = authStore();
 let {loginInfo, loginStatus} = storeToRefs(loginForm);
 
 // 로그인 팝업 오픈 시 아이디인풋에 포커스 주는 함수
@@ -60,6 +61,7 @@ function close() {
 watch(loginStatus, () => {
   if (loginStatus) {
     close();
+    auth.AuthFetch();
   } else {
     alert(loginInfo.value);
   }

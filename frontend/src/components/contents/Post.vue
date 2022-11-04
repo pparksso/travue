@@ -18,14 +18,9 @@
         </div>
         <p>{{ item.desc }}</p>
       </div>
-    </div>
-    <div class="heart" v-for="i in user.heart" :key="i">
-      <button id="fullHeart" v-if="i == item.no">
-        <span class="material-icons"> favorite </span>
-      </button>
-      <button id="emptyHeart" v-else @click="emptyHeartClick()">
-        <span class="material-icons-outlined"> favorite_border </span>
-      </button>
+      <div class="heart">
+        <Heart :no="item.no" />
+      </div>
     </div>
   </li>
 </template>
@@ -33,25 +28,13 @@
 <script setup>
 import {defineProps} from "vue";
 import {postStore} from "@/store/popup";
-import {authStore} from "@/store/user";
-import {heartStore} from "@/store/contents";
-import {storeToRefs} from "pinia";
-const auth = authStore();
+import Heart from "../common/Heart.vue";
+
 const post = postStore();
-const heart = heartStore();
-const {user} = storeToRefs(auth);
 
 defineProps({
   contents: Array,
 });
-
-function emptyHeartClick() {
-  heart.heartPlusAct();
-}
-
-// user.value.heart.map(item=> {
-//   if(item == )
-// })
 </script>
 
 <style lang="scss" scoped>
@@ -121,19 +104,6 @@ li {
     right: 5%;
     bottom: 28%;
     z-index: 1;
-    button {
-      position: absolute;
-      top: 10px;
-      right: 0;
-      z-index: 1;
-      padding: 0;
-      background: none;
-      .material-icons-outlined,
-      .material-icons {
-        font-size: 18px;
-        color: rgb(228, 9, 9);
-      }
-    }
   }
 }
 </style>
