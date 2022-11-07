@@ -67,7 +67,7 @@
 </template>
 
 <script setup>
-import {ref} from "vue";
+import {ref, onMounted} from "vue";
 import {signUpStore} from "@/store/popup";
 import {joinStore} from "@/store/user";
 import {storeToRefs} from "pinia";
@@ -84,9 +84,9 @@ const signUp = signUpStore();
 const join = joinStore();
 const {idOk, idNo, nicknameOk, nicknameNo} = storeToRefs(join);
 
-// onMounted(() => {
-//   console.log(idRef.);
-// });
+onMounted(() => {
+  idRef.value.focus();
+});
 // 팝업창 닫기
 function closeBtn() {
   signUp.close();

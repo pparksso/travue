@@ -45,15 +45,22 @@
             name="updateNickname"
             id="updateNickname"
             @input="nickname = $event.target.value"
-            :value="user.nickname"
+            :value="nickname"
         /></label>
       </div>
       <div class="btns">
-        <button id="signoutBtn"><span>탈퇴</span></button>
         <button @click.prevent="modifyBtn()">
           <span>수정</span>
         </button>
-        <button type="reset" id="myPageResetBtn"><span>취소</span></button>
+        <button id="signoutBtn" @click.prevent="signOutBtn()">
+          <span>탈퇴</span>
+        </button>
+
+        <router-link to="/">
+          <button type="reset" id="myPageResetBtn">
+            <span>취소</span>
+          </button>
+        </router-link>
       </div>
     </form>
   </section>
@@ -71,6 +78,8 @@ let pw01 = ref("");
 let pw02 = ref("");
 let nickname = ref("");
 
+nickname.value = user.value.nickname;
+// 수정 버튼
 function modifyBtn() {
   if (this.pw01 == this.pw02) {
     if (this.pw01.length < 8) {
@@ -84,6 +93,16 @@ function modifyBtn() {
     }
   } else {
     alert("비밀번호가 동일하지 않습니다.");
+  }
+}
+// 탈퇴 버튼
+function signOutBtn() {
+  if (pw01.value.length == 0 || pw02.value.length == 0) {
+    alert("비밀번호를 입력해주세요");
+  } else if (pw01.value !== pw02.value) {
+    alert("비밀번호가 일치하지 않습니다.");
+  } else {
+    myPage.signOutAct({id: user.value.id, pw: pw01.value});
   }
 }
 </script>

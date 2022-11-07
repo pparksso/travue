@@ -15,18 +15,17 @@
 </template>
 
 <script setup>
-// import {getCurrentInstance} from "vue";
 import Post from "@/components/contents/Post.vue";
 import Pagination from "@/components/common/Pagination.vue";
 import {mainStore} from "@/store/contents";
 import {storeToRefs} from "pinia";
 import {watch} from "@vue/runtime-core";
-// const insternalInstance = getCurrentInstance();
-// const emitter = insternalInstance.appContext.config.globalProperties.emitter;
+
 const main = mainStore();
 
 // 포스트 갖고오기
-main.getContents();
+await main.getContents();
+
 const {startPage, totalPage, minPage, page, pageNum, contents} =
   storeToRefs(main);
 
@@ -34,10 +33,6 @@ const {startPage, totalPage, minPage, page, pageNum, contents} =
 watch(pageNum, () => {
   main.getContents(pageNum.value);
 });
-
-// function openPopup() {
-//   emitter.emit("mainPopup");
-// }
 </script>
 
 <style lang="scss" scoped>

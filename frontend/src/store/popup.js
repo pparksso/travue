@@ -53,7 +53,7 @@ export const postStore = defineStore("post", {
           this.contents = res.data.contents;
           this.comments = res.data.comments;
         })
-        .catch((err) => console.log(err));
+        .catch(() => (window.location.href = "serverErr"));
       this.contents = [];
       this.comments = [];
       this.now = true;
@@ -67,7 +67,7 @@ export const postStore = defineStore("post", {
         .then((res) => {
           this.comments.push(res.data);
         })
-        .catch((err) => console.log(err));
+        .catch(() => (window.location.href = "serverErr"));
     },
     delCommentAct(no) {
       contentsApi
@@ -80,7 +80,7 @@ export const postStore = defineStore("post", {
             this.comments = [...newArr];
           }
         })
-        .catch((err) => console.log(err));
+        .catch(() => (window.location.href = "serverErr"));
     },
   },
   getters: {

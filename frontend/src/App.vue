@@ -1,29 +1,19 @@
 <template>
-  <Header />
-  <Login v-if="loginState" />
-  <SignUp v-if="signUpState" />
-  <PostPopup v-if="openPost" />
-  <router-view></router-view>
-  <Footer />
+  <Suspense @fallback="resolved">
+    <template #default>
+      <router-view></router-view>
+    </template>
+    <template #fallback>
+      <Skeleton />
+    </template>
+  </Suspense>
 </template>
 
 <script setup>
-import Header from "./components/common/Header.vue";
-import Login from "./components/user/Login.vue";
-import SignUp from "./components/user/SignUp.vue";
-import Footer from "./components/common/Footer.vue";
-import {loginStore, signUpStore} from "./store/popup";
-import PostPopup from "./components/contents/PostPopup.vue";
-import {postStore} from "@/store/popup";
-import {storeToRefs} from "pinia";
-
-const loginPopupStore = loginStore();
-const signUpPopupStore = signUpStore();
-const postPopupStore = postStore();
-
-const {loginState} = storeToRefs(loginPopupStore);
-const {signUpState} = storeToRefs(signUpPopupStore);
-const {openPost} = storeToRefs(postPopupStore);
+import Skeleton from "./components/page/Skeleton.vue";
+const resolved = () => {
+  console.log("resolved");
+};
 </script>
 
 <style lang="scss">

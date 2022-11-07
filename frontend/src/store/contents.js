@@ -15,11 +15,12 @@ export const mainStore = defineStore("main", {
     pageNum: 1,
   }),
   actions: {
-    async getContents(num) {
-      try {
-        this.contents = [];
-        this.comments = [];
-        await userApi.getPosts(num).then((res) => {
+    getContents(num) {
+      this.contents = [];
+      this.comments = [];
+      userApi
+        .getPosts(num)
+        .then((res) => {
           const items = res.data;
           this.contents.push(items.contents);
           this.comments.push(items.comments);
@@ -28,11 +29,10 @@ export const mainStore = defineStore("main", {
           this.startPage = items.startPage;
           this.totalPage = items.totalPage;
           this.lastPage = items.lastPage;
-        });
-      } catch (err) {
-        console.log(err);
-      }
+        })
+        .catch(() => (window.location.href = "serverErr"));
     },
+
     getPageNum(num) {
       this.pageNum = num;
     },
@@ -60,7 +60,7 @@ export const newStore = defineStore("new", {
           this.src = res.data.cloudinaryImgSrc;
           this.cloudinaryFileName = res.data.cloudinaryFileName;
         })
-        .catch((err) => console.log(err));
+        .catch(() => (window.location.href = "serverErr"));
     },
     sendNewFetch({title, date, location, desc, imgUrl, fileName}) {
       contentsApi
@@ -73,7 +73,9 @@ export const newStore = defineStore("new", {
             alert("다시 입력해주세요");
           }
         })
-        .catch((err) => console.log(err));
+        .catch(() => {
+          window.location.href = "serverErr";
+        });
     },
   },
 });
@@ -105,7 +107,7 @@ export const myTourStore = defineStore("mytour", {
           this.myLastPage = items.lastPage;
         });
       } catch (err) {
-        console.log(err);
+        window.location.href = "serverErr";
       }
     },
     getMyPageNum(num) {
@@ -128,8 +130,8 @@ export const editStore = defineStore("edit", {
           this.editContents = res.data.result;
           this.src = res.data.result.imgUrl;
         })
-        .catch((err) => {
-          console.log(err);
+        .catch(() => {
+          window.location.href = "serverErr";
         });
     },
     sendImgFetch(sendImgData) {
@@ -139,7 +141,7 @@ export const editStore = defineStore("edit", {
           this.src = res.data.cloudinaryImgSrc;
           this.cloudinaryFileName = res.data.cloudinaryFileName;
         })
-        .catch((err) => console.log(err));
+        .catch(() => (window.location.href = "serverErr"));
     },
     sendUpdateFetch({title, date, location, desc, imgUrl, fileName, no}) {
       contentsApi
@@ -152,7 +154,7 @@ export const editStore = defineStore("edit", {
             alert("다시 입력해주세요");
           }
         })
-        .catch((err) => console.log(err));
+        .catch(() => (window.location.href = "serverErr"));
     },
     deletePost(no) {
       if (window.confirm("삭제 하시겠습니까?")) {
@@ -163,7 +165,7 @@ export const editStore = defineStore("edit", {
               window.location.href = "/";
             }
           })
-          .catch((err) => console.log(err));
+          .catch(() => (window.location.href = "serverErr"));
       } else {
         return false;
       }

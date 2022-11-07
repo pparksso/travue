@@ -32,7 +32,7 @@
             type="text"
             name="date"
             id="date"
-            :value="date"
+            v-model="date"
             readonly
             required
           /><span>📅</span></label
@@ -47,7 +47,6 @@
         color="green"
         title-position="left"
         :max-date="new Date()"
-        @click.stop="closeDate()"
       />
       <div class="inputBox">
         <label
@@ -121,10 +120,11 @@ const modelConfig = {
 
 // 달력 열고 닫기
 function openDate() {
-  this.isCalendar = true;
-}
-function closeDate() {
-  this.isCalendar = false;
+  if (this.isCalendar) {
+    this.isCalendar = false;
+  } else {
+    this.isCalendar = true;
+  }
 }
 
 // 파일 첨부하고 바로 사진 띄우기(이미지 주소 받기)

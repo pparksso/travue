@@ -12,6 +12,7 @@ import {authStore} from "@/store/user";
 import {storeToRefs} from "pinia";
 import {defineProps, ref, watch} from "vue";
 import contentsApi from "@/api/contents";
+import router from "@/router";
 
 const auth = authStore();
 const {user, isAuth} = storeToRefs(auth);
@@ -35,13 +36,13 @@ if (isAuth.value) {
 }
 
 // 팝업 안에서 클릭했을 때, 유저 정보를 다시 받아(팝업안에서) 유저정보가 바뀌면 다시 유저정보를 읽으면서 하트상태를 변화시키는 함수
-// watch(user, (newUser) => {
-//   let heartArr = [newUser.heart];
-//   heartArr.forEach((i) => {
-//     if (i == props.no) return (isHeart.value = true);
-//     else return false;
-//   });
-// });
+watch(user, (newUser) => {
+  let heartArr = [newUser.heart];
+  heartArr.forEach((i) => {
+    if (i == props.no) return (isHeart.value = true);
+    else return false;
+  });
+});
 
 // 하트 클릭하기
 function addHeart() {
@@ -54,7 +55,7 @@ function addHeart() {
           auth.AuthFetch();
         }
       })
-      .catch((err) => console.log(err));
+      .catch(() => (window.location.href = "serverErr"));
   } else {
     alert("로그인 후 이용가능합니다.");
   }

@@ -5,7 +5,7 @@
     </div>
     <form action="" method="POST" enctype="multipart/form-data">
       <div class="imgBox">
-        <img alt="" :src="src" />
+        <img :alt="title" :src="imgUrl" />
       </div>
       <div class="inputBox">
         <label class="file"
@@ -32,8 +32,9 @@
             type="text"
             name="date"
             id="date"
-            :value="editContents.date"
+            :value="date"
             @input="date"
+            @change="closeDate()"
             readonly
             required
           /><span>📅</span></label
@@ -48,7 +49,6 @@
         color="green"
         title-position="left"
         :max-date="new Date()"
-        @click.stop="closeDate()"
       />
       <div class="inputBox">
         <label
@@ -59,7 +59,7 @@
             id="title"
             required
             maxlength="20"
-            :value="editContents.title"
+            :value="title"
             @input="title = $event.target.value"
         /></label>
       </div>
@@ -70,7 +70,7 @@
             type="text"
             name="location"
             id="location"
-            :value="editContents.location"
+            :value="location"
             required
             maxlength="20"
             @input="location = $event.target.value"
@@ -84,7 +84,7 @@
           rows="10"
           placeholder="내용을 입력하세요"
           required
-          :value="editContents.desc"
+          :value="desc"
           @input="desc = $event.target.value"
         ></textarea>
       </div>
@@ -101,20 +101,19 @@
 </template>
 
 <script setup>
-import {defineProps} from "vue";
+import {watch} from "vue";
 import {ref} from "@vue/reactivity";
 import {DatePicker} from "v-calendar";
 import {editStore} from "@/store/contents";
 import {storeToRefs} from "pinia";
+import {useRoute} from "vue-router";
 
+const router = useRoute();
 const edit = editStore();
 const {src, cloudinaryFileName, editContents} = storeToRefs(edit);
 
-const props = defineProps({
-  num: String,
-});
-
-edit.goEditPage(props.num);
+// 수정 데이터 받기
+edit.goEditPage(router.params.num);
 
 let date = ref("");
 let title = ref("");
@@ -123,6 +122,15 @@ let desc = ref("");
 const imgFile = ref();
 let image = ref("");
 let isCalendar = ref(false);
+let imgUrl = ref("");
+
+watch(editContents, (newEdit) => {
+  date.value = newEdit.date;
+  title.value = newEdit.title;
+  location.value = newEdit.location;
+  desc.value = newEdit.desc;
+  imgUrl.value = newEdit.imgUrl;
+});
 
 // 달력 옵션
 const modelConfig = {
@@ -132,10 +140,11 @@ const modelConfig = {
 
 // 달력 열고 닫기
 function openDate() {
-  this.isCalendar = true;
-}
-function closeDate() {
-  this.isCalendar = false;
+  if (this.isCalendar) {
+    this.isCalendar = false;
+  } else {
+    this.isCalendar = true;
+  }
 }
 
 // 파일 첨부하고 바로 사진 띄우기(이미지 주소 받기)
@@ -155,15 +164,24 @@ async function sendImg() {
 
 //글 정보 보내기
 function update() {
-  edit.sendUpdateFetch({
-    title: title.value,
-    date: date.value,
-    location: location.value,
-    desc: desc.value,
-    imgUrl: src.value,
-    fileName: cloudinaryFileName.value,
-    no: props.num,
-  });
+  if (
+    title.value.length == 0 ||
+    date.value.length == 0 ||
+    location.value.length == 0 ||
+    desc.value.length == 0
+  ) {
+    alert("모든 정보를 기입해주세요.");
+  } else {
+    edit.sendUpdateFetch({
+      title: title.value,
+      date: date.value,
+      location: location.value,
+      desc: desc.value,
+      imgUrl: src.value,
+      fileName: cloudinaryFileName.value,
+      no: router.params.num,
+    });
+  }
 }
 
 // 수정 취소하고 메인페이지로 이동

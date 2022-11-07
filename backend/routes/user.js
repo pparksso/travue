@@ -177,7 +177,7 @@ router.post("/signout", (req, res) => {
           });
         })
         .catch((err) => {
-          res.redirect("500");
+          console.log(err);
         });
     } else {
       res.json({ isPw: true });

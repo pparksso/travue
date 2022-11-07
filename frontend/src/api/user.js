@@ -70,6 +70,12 @@ function authFetch() {
 function modifyInfoFetch({id, pw, nickname}) {
   return req.post("/user/mypageupdate", {id, pw, nickname});
 }
+/**
+ * 회원 탈퇴
+ */
+function signOutFetch({id, pw}) {
+  return req.post("/user/signout", {id, pw});
+}
 const userApi = {
   getPosts,
   idCheck,
@@ -80,5 +86,6 @@ const userApi = {
   authFetch,
   getMyPosts,
   modifyInfoFetch,
+  signOutFetch,
 };
 export default userApi;

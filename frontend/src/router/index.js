@@ -1,9 +1,12 @@
 import {createRouter, createWebHistory} from "vue-router";
+import Layout from "../components/layout/Layout.vue";
 import MainView from "../views/MainView.vue";
 import New from "../components/page/New";
 import MyTourView from "../views/MyTourView.vue";
 import Edit from "../components/page/Edit.vue";
 import MyPage from "../components/page/MyPage.vue";
+import notFound from "../views/notFound.vue";
+import serverErr from "../views/serverErr.vue";
 
 import {storeToRefs} from "pinia";
 import {authStore} from "@/store/user";
@@ -11,46 +14,23 @@ import {authStore} from "@/store/user";
 const routes = [
   {
     path: "/",
-    name: "main",
-    component: MainView,
+    name: "layout",
+    component: Layout,
+    children: [
+      {path: "/", component: MainView},
+      {path: "mytour", component: MyTourView},
+      {path: "new", component: New},
+      {path: "edit/:num", component: Edit},
+      {path: "mypage", component: MyPage},
+    ],
   },
-  {path: "/mytour", name: "mytour", component: MyTourView},
+  {path: "/serverErr", name: "serverErr", component: serverErr},
   {
-    path: "/new",
-    name: "new",
-    component: New,
-    beforeEnter: (to, from, next) => {
-      const auth = authStore();
-      const {isAuth} = storeToRefs(auth);
-      if (isAuth) {
-        next();
-      } else {
-        alert(
-          "로그인이 해제되었습니다. 다시 로그인해주세요. 로그인 후 이용가능합니다."
-        );
-        next("/");
-      }
-    },
+    path: "/notFound",
+    name: "notFound",
+    component: notFound,
   },
-  {
-    path: "/edit/:num",
-    name: "edit",
-    props: true,
-    component: Edit,
-    beforeEnter: (to, from, next) => {
-      const auth = authStore();
-      const {isAuth} = storeToRefs(auth);
-      if (isAuth) {
-        next();
-      } else {
-        alert(
-          "로그인이 해제되었습니다. 다시 로그인해주세요. 로그인 후 이용가능합니다."
-        );
-        next("/");
-      }
-    },
-  },
-  {path: "/mypage", name: "mypage", component: MyPage},
+  {path: "/:pathMatch(.*)*", redirect: "/notFound"},
 ];
 
 const router = createRouter({
