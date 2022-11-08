@@ -23,4 +23,10 @@ export default {
   background-color: #333;
   word-break: keep-all;
 }
+
+@media all and (max-width: 450px) {
+  #footer {
+    font-size: clamp(10px, 3.6vw, 16px);
+  }
+}
 </style>
