@@ -25,7 +25,7 @@
                   <span class="nickname">{{ contents.nickname }}</span>
                 </div>
                 <div class="heart">
-                  <Heart :no="num">
+                  <Heart :no="clickNum">
                     <span id="userHeartNum" class="heartNum">{{
                       heartNum
                     }}</span>
@@ -115,14 +115,12 @@ const auth = authStore();
 const login = loginFormStore();
 const {loginStatus} = storeToRefs(login);
 const {user, isAuth, heartContents} = storeToRefs(auth);
-const {contents, comments} = storeToRefs(popupStore);
+const {contents, comments, clickNum} = storeToRefs(popupStore);
 
 let heartNum = ref();
-let num = ref();
 
 watch(contents, (newContents) => {
   heartNum.value = newContents.heartNum;
-  num.value = newContents.no;
 });
 
 watch(heartContents, (newHeartContents) => {

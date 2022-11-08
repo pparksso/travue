@@ -42,11 +42,15 @@ export const signUpStore = defineStore("signUp", {
 export const postStore = defineStore("post", {
   state: () => ({
     now: false,
-    comments: [],
-    contents: [],
+    comments: {},
+    contents: {},
+    clickNum: "",
   }),
   actions: {
     clickPost(no) {
+      this.comments = {};
+      this.contents = {};
+      this.clickNum = no;
       contentsApi
         .popupFetch(no)
         .then((res) => {
