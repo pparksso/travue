@@ -99,7 +99,7 @@ li {
   .heart {
     position: absolute;
     right: 5%;
-    bottom: 28%;
+    bottom: 21%;
     z-index: 1;
   }
 }

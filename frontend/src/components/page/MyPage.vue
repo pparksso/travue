@@ -69,40 +69,57 @@
 <script setup>
 import {authStore, myPageStore} from "@/store/user";
 import {storeToRefs} from "pinia";
-import {ref} from "vue";
+import {ref, watch} from "vue";
+import {useRouter} from "vue-router";
 const auth = authStore();
 const myPage = myPageStore();
 const {user} = storeToRefs(auth);
+const router = useRouter();
 
 let pw01 = ref("");
 let pw02 = ref("");
 let nickname = ref("");
 
+watch(user, (newUser) => {
+  if (!newUser) {
+    alert("시간이 지나 로그인이 해제되었습니다. 다시 로그인 해주세요.");
+    router.push("/serverErr");
+  }
+});
+
 nickname.value = user.value.nickname;
 // 수정 버튼
 function modifyBtn() {
-  if (this.pw01 == this.pw02) {
-    if (this.pw01.length < 8) {
-      alert("8자 이상이어야됨");
+  try {
+    if (this.pw01 == this.pw02) {
+      if (this.pw01.length < 8) {
+        alert("8자 이상이어야됨");
+      } else {
+        myPage.modifyInfoAct({
+          id: user.value.id,
+          pw: this.pw01,
+          nickname: this.nickname,
+        });
+      }
     } else {
-      myPage.modifyInfoAct({
-        id: user.value.id,
-        pw: this.pw01,
-        nickname: this.nickname,
-      });
+      alert("비밀번호가 동일하지 않습니다.");
     }
-  } else {
-    alert("비밀번호가 동일하지 않습니다.");
+  } catch (err) {
+    router.push("/serverErr");
   }
 }
 // 탈퇴 버튼
 function signOutBtn() {
-  if (pw01.value.length == 0 || pw02.value.length == 0) {
-    alert("비밀번호를 입력해주세요");
-  } else if (pw01.value !== pw02.value) {
-    alert("비밀번호가 일치하지 않습니다.");
-  } else {
-    myPage.signOutAct({id: user.value.id, pw: pw01.value});
+  try {
+    if (pw01.value.length == 0 || pw02.value.length == 0) {
+      alert("비밀번호를 입력해주세요");
+    } else if (pw01.value !== pw02.value) {
+      alert("비밀번호가 일치하지 않습니다.");
+    } else {
+      myPage.signOutAct({id: user.value.id, pw: pw01.value});
+    }
+  } catch (err) {
+    router.push("/serverErr");
   }
 }
 </script>

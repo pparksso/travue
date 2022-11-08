@@ -106,14 +106,18 @@ import {ref} from "@vue/reactivity";
 import {DatePicker} from "v-calendar";
 import {editStore} from "@/store/contents";
 import {storeToRefs} from "pinia";
-import {useRoute} from "vue-router";
+import {useRoute, useRouter} from "vue-router";
+import {authStore} from "@/store/user";
 
-const router = useRoute();
+const route = useRoute();
+const router = useRouter();
 const edit = editStore();
+const auth = authStore();
 const {src, cloudinaryFileName, editContents} = storeToRefs(edit);
+const {user} = storeToRefs(auth);
 
 // 수정 데이터 받기
-edit.goEditPage(router.params.num);
+edit.goEditPage(route.params.num);
 
 let date = ref("");
 let title = ref("");
@@ -130,6 +134,13 @@ watch(editContents, (newEdit) => {
   location.value = newEdit.location;
   desc.value = newEdit.desc;
   imgUrl.value = newEdit.imgUrl;
+});
+
+watch(user, (newUser) => {
+  if (!newUser) {
+    alert("시간이 지나 로그인이 해제되었습니다. 다시 로그인 해주세요.");
+    router.push("/");
+  }
 });
 
 // 달력 옵션
@@ -158,7 +169,7 @@ async function sendImg() {
     // }
     edit.sendImgFetch(sendImgData);
   } catch (err) {
-    console.log(err);
+    router.push("/serverErr");
   }
 }
 
@@ -172,21 +183,25 @@ function update() {
   ) {
     alert("모든 정보를 기입해주세요.");
   } else {
-    edit.sendUpdateFetch({
-      title: title.value,
-      date: date.value,
-      location: location.value,
-      desc: desc.value,
-      imgUrl: src.value,
-      fileName: cloudinaryFileName.value,
-      no: router.params.num,
-    });
+    try {
+      edit.sendUpdateFetch({
+        title: title.value,
+        date: date.value,
+        location: location.value,
+        desc: desc.value,
+        imgUrl: src.value,
+        fileName: cloudinaryFileName.value,
+        no: router.params.num,
+      });
+    } catch (err) {
+      router.push("/serverErr");
+    }
   }
 }
 
 // 수정 취소하고 메인페이지로 이동
 function resetUpdate() {
-  window.location.href = "/";
+  router.push("/");
 }
 </script>
 

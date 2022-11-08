@@ -21,7 +21,7 @@ export const joinStore = defineStore("join", {
             (this.idOk = false), (this.idNo = true);
           }
         })
-        .catch(() => (window.location.href = "serverErr"));
+        .catch(() => (window.location.href = "/serverErr"));
     },
     blankId() {
       this.idOk = false;
@@ -46,7 +46,7 @@ export const joinStore = defineStore("join", {
             this.nicknameNo = true;
           }
         })
-        .catch(() => (window.location.href = "serverErr"));
+        .catch(() => (window.location.href = "/serverErr"));
     },
     blankNickname() {
       this.nicknameOk = false;
@@ -61,7 +61,7 @@ export const joinStore = defineStore("join", {
             alert("회원가입을 축하드립니다. 로그인 후 이용 부탁드립니다.");
           }
         })
-        .catch(() => (window.location.href = "serverErr"));
+        .catch(() => (window.location.href = "/serverErr"));
     },
     blankStatus() {
       this.idOk = false;
@@ -93,7 +93,7 @@ export const loginFormStore = defineStore("loginForm", {
           }
         })
         .catch(() => {
-          window.location.href = "serverErr";
+          window.location.href = "/serverErr";
         });
     },
   },
@@ -111,7 +111,7 @@ export const logoutStore = defineStore("logout", {
           this.logoutState = true;
           window.location.href = "/";
         } else {
-          window.location.href = "serverErr";
+          window.location.href = "/serverErr";
         }
       });
     },
@@ -125,16 +125,21 @@ export const authStore = defineStore("auth", {
   }),
   actions: {
     AuthFetch() {
-      userApi.authFetch().then((res) => {
-        const result = res.data.auth;
-        const userInfo = res.data.userInfo;
-        if (result) {
-          this.isAuth = true;
-          this.user = userInfo;
-        } else {
-          this.isAuth = false;
-        }
-      });
+      userApi
+        .authFetch()
+        .then((res) => {
+          const result = res.data.auth;
+          const userInfo = res.data.userInfo;
+          if (result) {
+            this.isAuth = true;
+            this.user = userInfo;
+          } else {
+            this.isAuth = false;
+          }
+        })
+        .catch(() => {
+          window.location.href = "/serverErr";
+        });
     },
   },
 });
@@ -150,11 +155,11 @@ export const myPageStore = defineStore("myPage", {
             alert("정보가 수정되었습니다.");
             window.location.href = "/";
           } else {
-            window.location.href = "serverErr";
+            window.location.href = "/serverErr";
           }
         })
         .catch(() => {
-          window.location.href = "serverErr";
+          window.location.href = "/serverErr";
         });
     },
     signOutAct({id, pw}) {
@@ -168,7 +173,7 @@ export const myPageStore = defineStore("myPage", {
             alert("비밀번호가 일치하지 않습니다.");
           }
         })
-        .catch(() => (window.location.href = "serverErr"));
+        .catch(() => (window.location.href = "/serverErr"));
     },
   },
 });
