@@ -22,7 +22,7 @@ router.post("/add", async (req, res) => {
     });
     res.json(commentInsert);
   } catch (err) {
-    res.redirect("500");
+    res.status(500);
   }
 });
 
@@ -35,7 +35,7 @@ router.post("/delete", async (req, res) => {
       }
     });
   } catch (err) {
-    res.redirect("500");
+    res.status(500);
   }
 });
 

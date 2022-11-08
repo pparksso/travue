@@ -25,9 +25,9 @@
                   <span class="nickname">{{ contents.nickname }}</span>
                 </div>
                 <div class="heart">
-                  <Heart>
+                  <Heart :no="num">
                     <span id="userHeartNum" class="heartNum">{{
-                      contents.heartNum
+                      heartNum
                     }}</span>
                   </Heart>
                 </div>
@@ -107,7 +107,6 @@
 import {ref, watch} from "vue";
 import PopupSkeleton from "../page/PopupSkeleton.vue";
 import Heart from "../common/Heart.vue";
-import contentsApi from "@/api/contents";
 import {postStore} from "@/store/popup";
 import {loginFormStore, authStore} from "@/store/user";
 import {storeToRefs} from "pinia";
@@ -115,10 +114,21 @@ const popupStore = postStore();
 const auth = authStore();
 const login = loginFormStore();
 const {loginStatus} = storeToRefs(login);
-const {user, isAuth} = storeToRefs(auth);
+const {user, isAuth, heartContents} = storeToRefs(auth);
 const {contents, comments} = storeToRefs(popupStore);
+
+let heartNum = ref();
+let num = ref();
+
+watch(contents, (newContents) => {
+  heartNum.value = newContents.heartNum;
+  num.value = newContents.no;
+});
+
+watch(heartContents, (newHeartContents) => {
+  heartNum.value = newHeartContents.heartNum;
+});
 let newComment = ref("");
-let isHeart = ref(false);
 let btns = ref(false);
 </script>
 
@@ -201,17 +211,6 @@ let btns = ref(false);
             display: inline-block;
             margin: 0 3px 3px 0;
             font-size: 12px;
-          }
-          button {
-            background: none;
-            &#noUserHeart {
-              display: block;
-            }
-            .material-icons-outlined,
-            .material-icons {
-              font-size: 18px;
-              color: rgb(228, 9, 9);
-            }
           }
         }
       }

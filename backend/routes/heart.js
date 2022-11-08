@@ -24,9 +24,10 @@ router.post("/plus", async (req, res) => {
         },
       }
     );
+    const updateUser = await userDb.findOneAndUpdate({ userNum: req.user.userNum }, { $addToSet: { heart: no } }, { new: true });
     const plus = await contentsDb.updateOne({ no: no }, { $inc: { heartNum: 1 } });
     const result = await contentsDb.findOne({ no: no });
-    res.json({ add: true });
+    res.json({ add: true, result, user: updateUser });
   } catch (err) {
     console.log(err);
   }
@@ -35,17 +36,10 @@ router.post("/plus", async (req, res) => {
 router.post("/minus", async (req, res) => {
   try {
     const no = Number(req.body.no);
-    await userDb.updateOne(
-      { userNum: req.user.userNum },
-      {
-        $pull: {
-          heart: no,
-        },
-      }
-    );
+    const updateUser = await userDb.findOneAndUpdate({ userNum: req.user.userNum }, { $pull: { heart: no } }, { new: true });
     const minus = await contentsDb.updateOne({ no: no }, { $inc: { heartNum: -1 } });
     const result = await contentsDb.findOne({ no: no });
-    res.json({ del: true });
+    res.json({ del: true, result, user: updateUser });
   } catch (err) {
     console.log(err);
   }

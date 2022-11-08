@@ -1,5 +1,6 @@
 import {defineStore} from "pinia";
 import userApi from "@/api/user";
+import contentsApi from "@/api/contents";
 
 export const joinStore = defineStore("join", {
   state: () => ({
@@ -122,6 +123,7 @@ export const authStore = defineStore("auth", {
   state: () => ({
     isAuth: false,
     user: {},
+    heartContents: {},
   }),
   actions: {
     AuthFetch() {
@@ -140,6 +142,24 @@ export const authStore = defineStore("auth", {
         .catch(() => {
           window.location.href = "/serverErr";
         });
+    },
+    plusHeartAct(no) {
+      contentsApi
+        .heartAddFetch(no)
+        .then((res) => {
+          this.user = res.data.user;
+          this.heartContents = res.data.result;
+        })
+        .catch((err) => console.log(err));
+    },
+    minusHeartAct(no) {
+      contentsApi
+        .delHeartFetch(no)
+        .then((res) => {
+          this.user = res.data.user;
+          this.heartContents = res.data.result;
+        })
+        .catch((err) => console.log(err));
     },
   },
 });

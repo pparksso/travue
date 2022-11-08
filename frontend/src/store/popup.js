@@ -42,8 +42,8 @@ export const signUpStore = defineStore("signUp", {
 export const postStore = defineStore("post", {
   state: () => ({
     now: false,
-    contents: [],
     comments: [],
+    contents: [],
   }),
   actions: {
     clickPost(no) {
@@ -53,9 +53,7 @@ export const postStore = defineStore("post", {
           this.contents = res.data.contents;
           this.comments = res.data.comments;
         })
-        .catch(() => (window.location.href = "serverErr"));
-      this.contents = [];
-      this.comments = [];
+        .catch(() => (window.location.href = "/serverErr"));
       this.now = true;
     },
     closePost() {
@@ -67,7 +65,7 @@ export const postStore = defineStore("post", {
         .then((res) => {
           this.comments.push(res.data);
         })
-        .catch(() => (window.location.href = "serverErr"));
+        .catch(() => (window.location.href = "/serverErr"));
     },
     delCommentAct(no) {
       contentsApi
@@ -80,7 +78,7 @@ export const postStore = defineStore("post", {
             this.comments = [...newArr];
           }
         })
-        .catch(() => (window.location.href = "serverErr"));
+        .catch(() => (window.location.href = "/serverErr"));
     },
   },
   getters: {
