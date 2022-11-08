@@ -20,7 +20,6 @@ let isHeart = ref(false);
 const auth = authStore();
 const {isAuth, user} = storeToRefs(auth);
 
-console.log(props.no);
 //처음 화면이 로딩됐을 때 하트 상태
 if (!isAuth.value) {
   isHeart.value = false;

@@ -1,25 +1,23 @@
 <template>
-  <Suspense>
-    <li class="post" v-for="item in contents[0]" :key="item.title">
-      <div class="contentsBox" @click="post.clickPost(item.no)">
-        <div class="img">
-          <img :src="item.imgUrl" :alt="item.title" />
-        </div>
-        <div class="txtBox">
-          <div class="top">
-            <div class="titleBox">
-              <span class="location">{{ item.location }}</span>
-              <h1>{{ item.title }}</h1>
-            </div>
+  <li class="post" v-for="item in contents[0]" :key="item.title">
+    <div class="contentsBox" @click="post.clickPost(item.no)">
+      <div class="img">
+        <img :src="item.imgUrl" :alt="item.title" />
+      </div>
+      <div class="txtBox">
+        <div class="top">
+          <div class="titleBox">
+            <span class="location">{{ item.location }}</span>
+            <h1>{{ item.title }}</h1>
           </div>
-          <p>{{ item.desc }}</p>
         </div>
+        <p>{{ item.desc }}</p>
       </div>
-      <div class="heart">
-        <Heart :no="item.no" />
-      </div>
-    </li>
-  </Suspense>
+    </div>
+    <div class="heart">
+      <Heart :no="item.no" />
+    </div>
+  </li>
 </template>
 
 <script setup>

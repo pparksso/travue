@@ -3,6 +3,11 @@
     <div class="container">
       <ul>
         <li class="post"></li>
+        <li class="post"></li>
+        <li class="post"></li>
+        <li class="post"></li>
+        <li class="post"></li>
+        <li class="post"></li>
       </ul>
     </div>
   </div>
@@ -22,9 +27,10 @@
     li {
       width: calc(33.33% - 20px);
       position: relative;
-      margin: 0 10px;
+      margin: 20px 10px;
       border-radius: 10px;
       background-color: #f2f2f2;
+      height: 366px;
     }
   }
 }

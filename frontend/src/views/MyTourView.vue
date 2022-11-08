@@ -1,5 +1,6 @@
 <template>
-  <div class="main">
+  <Skeleton v-if="ui" />
+  <div class="main" v-else>
     <div class="container">
       <ul>
         <Post :contents="myContents" />
@@ -18,6 +19,7 @@
 </template>
 
 <script setup>
+import Skeleton from "@/components/page/Skeleton.vue";
 import Post from "@/components/contents/Post.vue";
 import Pagination from "@/components/common/Pagination.vue";
 import {myTourStore} from "@/store/contents";
@@ -27,7 +29,7 @@ const myTour = myTourStore();
 
 // 포스트 갖고오기
 myTour.getMyContents();
-const {myStartPage, myTotalPage, myMinPage, myPage, myPageNum, myContents} =
+const {myStartPage, myTotalPage, myMinPage, myPage, myPageNum, myContents, ui} =
   storeToRefs(myTour);
 
 // 페이지가 바뀌면 다시 포스트 호출

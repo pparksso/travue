@@ -13,6 +13,7 @@ export const mainStore = defineStore("main", {
     totalPage: 0,
     lastPage: 0,
     pageNum: 1,
+    ui: true,
   }),
   actions: {
     getContents(num) {
@@ -29,6 +30,7 @@ export const mainStore = defineStore("main", {
           this.startPage = items.startPage;
           this.totalPage = items.totalPage;
           this.lastPage = items.lastPage;
+          this.ui = false;
         })
         .catch(() => (window.location.href = "serverErr"));
     },
@@ -90,6 +92,7 @@ export const myTourStore = defineStore("mytour", {
     myTotalPage: 0,
     myLastPage: 0,
     myPageNum: 1,
+    ui: true,
   }),
   actions: {
     async getMyContents(num) {
@@ -105,6 +108,7 @@ export const myTourStore = defineStore("mytour", {
           this.myStartPage = items.startPage;
           this.myTotalPage = items.totalPage;
           this.myLastPage = items.lastPage;
+          this.ui = false;
         });
       } catch (err) {
         window.location.href = "serverErr";

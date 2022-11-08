@@ -1,5 +1,6 @@
 <template>
-  <div class="main">
+  <Skeleton v-if="ui" />
+  <div class="main" v-else>
     <div class="container">
       <ul>
         <Post :contents="contents" />
@@ -17,6 +18,7 @@
 <script setup>
 import Post from "@/components/contents/Post.vue";
 import Pagination from "@/components/common/Pagination.vue";
+import Skeleton from "@/components/page/Skeleton.vue";
 import {mainStore} from "@/store/contents";
 import {storeToRefs} from "pinia";
 import {watch} from "@vue/runtime-core";
@@ -24,9 +26,9 @@ import {watch} from "@vue/runtime-core";
 const main = mainStore();
 
 // 포스트 갖고오기
-await main.getContents();
+main.getContents();
 
-const {startPage, totalPage, minPage, page, pageNum, contents} =
+const {startPage, totalPage, minPage, page, pageNum, contents, ui} =
   storeToRefs(main);
 
 // 페이지가 바뀌면 다시 포스트 호출

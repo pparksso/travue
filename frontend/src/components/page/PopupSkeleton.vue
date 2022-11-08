@@ -18,6 +18,7 @@
   .popupItem {
     width: 40%;
     position: absolute;
+    height: 650px;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);

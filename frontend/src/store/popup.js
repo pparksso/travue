@@ -45,6 +45,8 @@ export const postStore = defineStore("post", {
     comments: {},
     contents: {},
     clickNum: "",
+    ui: true,
+    cssOn: false,
   }),
   actions: {
     clickPost(no) {
@@ -56,12 +58,15 @@ export const postStore = defineStore("post", {
         .then((res) => {
           this.contents = res.data.contents;
           this.comments = res.data.comments;
+          this.ui = false;
+          this.cssOn = true;
         })
         .catch(() => (window.location.href = "/serverErr"));
       this.now = true;
     },
     closePost() {
       this.now = false;
+      this.cssOn = false;
     },
     addCommentAct({comment, contentsNo}) {
       contentsApi

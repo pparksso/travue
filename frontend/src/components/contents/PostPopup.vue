@@ -1,106 +1,98 @@
 <template>
-  <Suspense>
-    <template #default>
-      <div class="contentsPopup cover">
-        <div class="popupItem userBox">
-          <div class="top">
-            <div class="title">
-              <h1></h1>
+  <PopupSkeleton v-if="ui" />
+  <div class="contentsPopup, cover" v-else>
+    <div class="popupItem userBox">
+      <div class="top">
+        <div class="title">
+          <h1></h1>
+        </div>
+        <button class="popupCloseBtn">
+          <span class="material-icons" @click="popupStore.closePost()">
+            close
+          </span>
+        </button>
+      </div>
+      <div class="popupBody">
+        <div class="center">
+          <div class="imgBox">
+            <img :src="contents.imgUrl" :alt="contents.title" />
+          </div>
+          <div class="infoBox">
+            <div class="info">
+              <span class="location">{{ contents.location }}</span>
+              <span class="date">{{ contents.date }}</span>
+              <span class="nickname">{{ contents.nickname }}</span>
             </div>
-            <button class="popupCloseBtn">
-              <span class="material-icons" @click="popupStore.closePost()">
-                close
-              </span>
+            <div class="heart">
+              <Heart :no="clickNum">
+                <span id="userHeartNum" class="heartNum">{{ heartNum }}</span>
+              </Heart>
+            </div>
+          </div>
+          <div class="txtBox">
+            <p>{{ contents.desc }}</p>
+          </div>
+        </div>
+        <div class="commentWrap">
+          <div class="inputBox" v-if="isAuth || loginStatus">
+            <label
+              ><input
+                type="text"
+                name=""
+                maxlength="50"
+                class="commentInput"
+                @input="newComment = $event.target.value"
+                :value="newComment"
+                @keydown.enter="
+                  popupStore.addCommentAct({
+                    comment: newComment,
+                    contentsNo: contents.no,
+                  });
+                  newComment = '';
+                "
+            /></label>
+            <button
+              class="commentAddBtn"
+              @click="
+                popupStore.addCommentAct({
+                  comment: newComment,
+                  contentsNo: contents.no,
+                });
+                newComment = '';
+              "
+            >
+              <span>등록</span>
             </button>
           </div>
-          <div class="popupBody">
-            <div class="center">
-              <div class="imgBox">
-                <img :src="contents.imgUrl" :alt="contents.title" />
+          <div class="commentBox">
+            <div class="comment" v-for="com in comments" :key="com">
+              <div class="commentLeft">
+                <span class="userNickname"> {{ com.nickname }} </span>
+                <p>{{ com.comment }}</p>
               </div>
-              <div class="infoBox">
-                <div class="info">
-                  <span class="location">{{ contents.location }}</span>
-                  <span class="date">{{ contents.date }}</span>
-                  <span class="nickname">{{ contents.nickname }}</span>
-                </div>
-                <div class="heart">
-                  <Heart :no="clickNum">
-                    <span id="userHeartNum" class="heartNum">{{
-                      heartNum
-                    }}</span>
-                  </Heart>
-                </div>
-              </div>
-              <div class="txtBox">
-                <p>{{ contents.desc }}</p>
-              </div>
-            </div>
-            <div class="commentWrap">
-              <div class="inputBox" v-if="isAuth || loginStatus">
-                <label
-                  ><input
-                    type="text"
-                    name=""
-                    maxlength="50"
-                    class="commentInput"
-                    @input="newComment = $event.target.value"
-                    :value="newComment"
-                    @keydown.enter="
-                      popupStore.addCommentAct({
-                        comment: newComment,
-                        contentsNo: contents.no,
-                      });
-                      newComment = '';
-                    "
-                /></label>
-                <button
-                  class="commentAddBtn"
-                  @click="
-                    popupStore.addCommentAct({
-                      comment: newComment,
-                      contentsNo: contents.no,
-                    });
-                    newComment = '';
-                  "
-                >
-                  <span>등록</span>
-                </button>
-              </div>
-              <div class="commentBox">
-                <div class="comment" v-for="com in comments" :key="com">
-                  <div class="commentLeft">
-                    <span class="userNickname"> {{ com.nickname }} </span>
-                    <p>{{ com.comment }}</p>
-                  </div>
-                  <button
-                    class="commentDelBtn"
-                    v-if="com.id == user.id"
-                    @click="popupStore.delCommentAct(com.no)"
-                  >
-                    <span class="material-icons"> close </span>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="bottom" v-if="btns">
-            <div class="btns">
-              <router-link :to="`/edit/${contents.no}`">
-                <button @click="popupStore.closePost()">
-                  <span>수정</span>
-                </button>
-              </router-link>
-              <button @click="edit.deletePost(no)"><span>삭제</span></button>
+              <button
+                class="commentDelBtn"
+                v-if="com.id == user.id"
+                @click="popupStore.delCommentAct(com.no)"
+              >
+                <span class="material-icons"> close </span>
+              </button>
             </div>
           </div>
         </div>
       </div>
-    </template>
-    <template #fallback>
-      <PopupSkeleton />
-    </template>
-  </Suspense>
+      <div class="bottom" v-if="btns">
+        <div class="btns">
+          <router-link :to="`/edit/${contents.no}`">
+            <button @click="popupStore.closePost()">
+              <span>수정</span>
+            </button>
+          </router-link>
+          <button @click="edit.deletePost(no)"><span>삭제</span></button>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script setup>
@@ -115,7 +107,7 @@ const auth = authStore();
 const login = loginFormStore();
 const {loginStatus} = storeToRefs(login);
 const {user, isAuth, heartContents} = storeToRefs(auth);
-const {contents, comments, clickNum} = storeToRefs(popupStore);
+const {contents, comments, clickNum, ui} = storeToRefs(popupStore);
 
 let heartNum = ref();
 
@@ -149,6 +141,7 @@ let btns = ref(false);
     overflow: hidden;
     background-color: #fff;
     border-radius: 20px;
+
     .top {
       display: flex;
       justify-content: space-between;
