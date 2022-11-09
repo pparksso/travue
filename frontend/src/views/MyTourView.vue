@@ -52,4 +52,19 @@ watch(myPageNum, () => {
     flex-wrap: wrap;
   }
 }
+
+@include tablet {
+  .container {
+    width: 90vw;
+  }
+}
+@include mobile {
+  .container {
+    width: 90vw;
+    padding: 50px 0;
+    .empty {
+      font-size: 15px;
+    }
+  }
+}
 </style>

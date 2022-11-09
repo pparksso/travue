@@ -38,7 +38,6 @@ watch(pageNum, () => {
 </script>
 
 <style lang="scss" scoped>
-@import url("@/assets/scss/_mixin.scss");
 .container {
   width: 80vw;
   margin: 0 auto;
@@ -49,11 +48,16 @@ watch(pageNum, () => {
     flex-wrap: wrap;
   }
 }
+
+@include tablet {
+  .container {
+    width: 90vw;
+  }
+}
 @include mobile {
   .container {
-    ul {
-      padding: 10px;
-    }
+    width: 90vw;
+    padding: 50px 0;
   }
 }
 </style>

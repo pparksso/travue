@@ -34,4 +34,14 @@
     }
   }
 }
+@include tablet {
+  .container ul li {
+    width: calc(50% - 20px);
+  }
+}
+@include mobile {
+  .container li {
+    width: 100%;
+  }
+}
 </style>

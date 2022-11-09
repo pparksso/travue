@@ -28,4 +28,14 @@
     border-radius: 20px;
   }
 }
+@include tablet {
+  .cover .popupItem {
+    width: 80vw;
+  }
+}
+@include mobile {
+  .cover .popupItem {
+    width: 90vw;
+  }
+}
 </style>

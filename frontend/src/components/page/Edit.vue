@@ -342,4 +342,53 @@ function resetUpdate() {
   overflow: hidden;
   margin: 0;
 }
+
+@include tablet {
+  .subSection {
+    width: 90vw;
+    form .dateBox {
+      width: 28%;
+    }
+  }
+}
+@include mobile {
+  .subSection {
+    width: 90vw;
+    form {
+      .inputBox {
+        padding: 10px;
+        label {
+          span {
+            font-size: 13px;
+            justify-content: start;
+          }
+          &::before {
+            left: 40px;
+          }
+          input {
+            font-size: 12px;
+            &::placeholder {
+              font-size: 12px;
+            }
+          }
+        }
+        textarea {
+          font-size: 12px;
+        }
+      }
+      .dateBox {
+        width: 33%;
+      }
+      .btns {
+        margin-top: 30px;
+        button {
+          span {
+            font-size: 12px;
+            font-weight: 500;
+          }
+        }
+      }
+    }
+  }
+}
 </style>

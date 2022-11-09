@@ -40,4 +40,11 @@ header {
     }
   }
 }
+@include mobile {
+  header .logo {
+    h1 {
+      font-size: 32px;
+    }
+  }
+}
 </style>

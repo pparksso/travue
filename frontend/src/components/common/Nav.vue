@@ -59,4 +59,12 @@ function clickedLogout() {
     }
   }
 }
+@include mobile {
+  .nav ul li {
+    button {
+      font-size: 13px;
+      padding: 0;
+    }
+  }
+}
 </style>

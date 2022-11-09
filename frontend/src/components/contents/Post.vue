@@ -70,10 +70,13 @@ li {
           span {
             font-size: 12px;
             line-height: 2;
+            width: 20%;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
           }
           h1 {
             display: inline-block;
-            flex-grow: 1;
             overflow: hidden;
             margin-left: 10px;
             font-weight: 700;
@@ -99,6 +102,34 @@ li {
     right: 5%;
     bottom: 21%;
     z-index: 1;
+  }
+}
+
+@include tablet {
+  li {
+    width: calc(50% - 20px);
+  }
+}
+@include mobile {
+  li {
+    width: 100%;
+    .contentsBox .txtBox {
+      p {
+        font-size: 12px;
+      }
+      .top .titleBox {
+        align-items: center;
+        span {
+          line-height: 0;
+        }
+        h1 {
+          font-size: 15px;
+        }
+      }
+    }
+    .heart {
+      bottom: 18%;
+    }
   }
 }
 </style>

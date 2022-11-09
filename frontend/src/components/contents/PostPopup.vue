@@ -109,17 +109,20 @@ const {loginStatus} = storeToRefs(login);
 const {user, isAuth, heartContents} = storeToRefs(auth);
 const {contents, comments, clickNum, ui} = storeToRefs(popupStore);
 
+let newComment = ref("");
 let heartNum = ref();
+let btns = ref(false);
 
 watch(contents, (newContents) => {
   heartNum.value = newContents.heartNum;
+  if (newContents.userNum == user.value.userNum) {
+    btns.value = true;
+  }
 });
 
 watch(heartContents, (newHeartContents) => {
   heartNum.value = newHeartContents.heartNum;
 });
-let newComment = ref("");
-let btns = ref(false);
 </script>
 
 <style lang="scss" scoped>
@@ -276,6 +279,46 @@ let btns = ref(false);
           padding: 5px 7px;
           &:last-child {
             margin-left: 5px;
+          }
+        }
+      }
+    }
+  }
+}
+
+@include tablet {
+  .cover .popupItem {
+    width: 80vw;
+  }
+}
+@include mobile {
+  .cover .popupItem {
+    width: 90vw;
+    .popupBody {
+      .center {
+        .infoBox .info {
+          .location {
+            font-size: 16px;
+          }
+        }
+        .txtBox p {
+          font-size: 12px;
+        }
+      }
+      .commentWrap {
+        padding: 10px;
+        .commentBox {
+          padding: 10px 0;
+          .comment .commentLeft {
+            .userNickname {
+              width: 80px;
+              display: flex;
+              align-items: center;
+              font-size: 10px;
+            }
+            p {
+              font-size: 12px;
+            }
           }
         }
       }
